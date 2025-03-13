@@ -89,7 +89,7 @@ const NewSessionControls = ({
       type: "group",
       label: (
         <div>
-          <div className="text-xs text-secondary mb-1">Select a team</div>
+          <div className="text-xs text-secondary mb-1">请选择</div>
           <Input
             prefix={<TextSearch className="w-4 h-4" />}
             placeholder="Search teams"
@@ -134,8 +134,8 @@ const NewSessionControls = ({
         onClick={handleStartSession}
         disabled={!selectedTeamId || isLoading}
       >
-        <div className="" style={{ width: "183px" }}>
-          <Plus className="w-4 h-4 inline-block -mt-1" /> New Session
+        <div style={{ width: "170px" }}>
+          <Plus className="w-4 h-4 inline-block -mt-1" /> 新建会话
         </div>
       </Dropdown.Button>
 

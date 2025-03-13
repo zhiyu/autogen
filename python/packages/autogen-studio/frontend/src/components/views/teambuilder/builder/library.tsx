@@ -83,7 +83,7 @@ export const ComponentLibrary: React.FC<LibraryProps> = () => {
   const sections = React.useMemo(
     () => [
       {
-        title: "Agents",
+        title: "智能体",
         type: "agent" as ComponentTypes,
         items: defaultGallery.config.components.agents.map((agent) => ({
           label: agent.label,
@@ -92,7 +92,7 @@ export const ComponentLibrary: React.FC<LibraryProps> = () => {
         icon: <Bot className="w-4 h-4" />,
       },
       {
-        title: "Models",
+        title: "模型",
         type: "model" as ComponentTypes,
         items: defaultGallery.config.components.models.map((model) => ({
           label: `${model.label || model.config.model}`,
@@ -101,7 +101,7 @@ export const ComponentLibrary: React.FC<LibraryProps> = () => {
         icon: <Brain className="w-4 h-4" />,
       },
       {
-        title: "Tools",
+        title: "工具",
         type: "tool" as ComponentTypes,
         items: defaultGallery.config.components.tools.map((tool) => ({
           label: tool.config.name,
@@ -110,7 +110,7 @@ export const ComponentLibrary: React.FC<LibraryProps> = () => {
         icon: <Wrench className="w-4 h-4" />,
       },
       {
-        title: "Terminations",
+        title: "终止条件",
         type: "termination" as ComponentTypes,
         items: defaultGallery.config.components.terminations.map(
           (termination) => ({
@@ -132,8 +132,7 @@ export const ComponentLibrary: React.FC<LibraryProps> = () => {
     return {
       key: section.title,
       label: (
-        <div className="flex items-center gap-2 font-medium">
-          {section.icon}
+        <div className="flex items-center gap-1 font-medium">
           <span>{section.title}</span>
           <span className="text-xs text-gray-500">
             ({filteredItems.length})
@@ -149,7 +148,7 @@ export const ComponentLibrary: React.FC<LibraryProps> = () => {
               type={section.type}
               config={item.config}
               label={item.label || ""}
-              icon={section.icon}
+              icon={null}
             />
           ))}
         </div>
@@ -163,7 +162,7 @@ export const ComponentLibrary: React.FC<LibraryProps> = () => {
         onClick={() => setIsMinimized(false)}
         className="absolute group top-4 left-4 bg-primary shadow-md rounded px-4 pr-2 py-2 cursor-pointer transition-all duration-300 z-50 flex items-center gap-2"
       >
-        <span>Show Component Library</span>
+        <span>显示组件库</span>
         <button
           onClick={() => setIsMinimized(false)}
           className="p-1 group-hover:bg-tertiary rounded transition-colors"
@@ -177,12 +176,12 @@ export const ComponentLibrary: React.FC<LibraryProps> = () => {
 
   return (
     <Sider
-      width={300}
-      className="bg-primary border z-10 mr-2 border-r border-secondary"
+      width={260}
+      className="absolute top-4 left-4 bg-primary  z-10 mr-2 border border-secondary rounded"
     >
-      <div className="rounded p-2 pt-2">
-        <div className="flex justify-between items-center mb-2">
-          <div className="text-normal">Component Library</div>
+      <div className="rounded">
+        <div className="flex justify-between items-center mb-2 p-2 px-4">
+          <div className="text-normal">组件库</div>
           <button
             onClick={() => setIsMinimized(true)}
             className="p-1 hover:bg-tertiary rounded transition-colors"
@@ -191,20 +190,16 @@ export const ComponentLibrary: React.FC<LibraryProps> = () => {
             <Minimize2 className="w-4 h-4" />
           </button>
         </div>
-
-        <div className="mb-4 text-secondary">
-          Drag a component to add it to the team
-        </div>
-
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-4 px-4">
           <Input
-            placeholder="Search components..."
+            placeholder="搜索组件..."
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 p-2"
+            className="flex-1 p-2 px-4"
           />
         </div>
 
         <Collapse
+          className="bg-transparent"
           accordion
           items={items}
           defaultActiveKey={["Agents"]}

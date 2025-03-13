@@ -124,7 +124,7 @@ const BaseNode = memo<BaseNodeProps>(
       <div
         ref={dragHandle}
         className={`
-        bg-white text-primary relative rounded-lg shadow-lg w-72 
+        bg-white text-primary relative rounded-lg  w-72 border-2 border-secondary
         ${selected ? "ring-2 ring-accent" : ""}
         ${className || ""} 
         transition-all duration-200

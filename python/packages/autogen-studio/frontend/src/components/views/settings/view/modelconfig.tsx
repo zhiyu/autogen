@@ -39,26 +39,26 @@ export const ModelConfigPanel: React.FC<ModelConfigPanelProps> = ({
     <>
       <div className=" ">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-medium">Default Model Configuration</h3>
-          <Tooltip title="Edit Default Model Settings">
-            <Button
-              type="primary"
-              icon={<Edit2 className="w-4 h-4 mr-1" />}
-              onClick={handleOpenModelEditor}
-              className="flex items-center"
-            >
-              Edit Model
-            </Button>
-          </Tooltip>
+          <h3 className="text-lg font-medium">默认模型配置</h3>
+          <div className="space-x-2 inline-flex">
+            <Tooltip title="设置默认模型">
+              <Button
+                type="primary"
+                icon={<Edit2 className="w-4 h-4 mr-1" />}
+                onClick={handleOpenModelEditor}
+                className="flex items-center"
+              >
+                编辑
+              </Button>
+            </Tooltip>
+          </div>
         </div>
 
-        <div className="mb-6">
-          Configure a default model that will be used for system level tasks.
-        </div>
+        <div className="mb-6">配置一个预设模型，用于执行系统级任务。</div>
         <div className="bg-secondary p-4 rounded">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-sm font-medium text-primary">Model</p>
+              <p className="text-sm font-medium text-primary">模型</p>
               <p className="text-sm">
                 {modelComponent.label || "" || "Not set"}
               </p>
@@ -67,14 +67,14 @@ export const ModelConfigPanel: React.FC<ModelConfigPanelProps> = ({
               </p>
             </div>
             <div>
-              <p className="text-sm font-medium text-primary">Model Provider</p>
+              <p className="text-sm font-medium text-primary">提供商</p>
               <p className="  break-all text-sm">
                 {modelComponent.provider || "Not set"}
               </p>
             </div>
             {modelComponent.config?.temperature && (
               <div>
-                <p className="text-sm font-medium text-primary">Temperature</p>
+                <p className="text-sm font-medium text-primary">温度</p>
                 <p className="text-base">
                   {modelComponent.config?.temperature}
                 </p>
@@ -86,7 +86,7 @@ export const ModelConfigPanel: React.FC<ModelConfigPanelProps> = ({
 
       {/* Model Editor Drawer */}
       <Drawer
-        title="Edit Default Model Client"
+        title="编辑默认模型配置"
         placement="right"
         size="large"
         onClose={handleCloseModelEditor}

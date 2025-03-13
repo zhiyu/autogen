@@ -268,7 +268,11 @@ export const GalleryDetail: React.FC<{
     label: (
       <span className="flex items-center gap-2">
         <Icon className="w-5 h-5" />
-        {key.charAt(0).toUpperCase() + key.slice(1)}s
+        {key == "team" && "团队"}
+        {key == "agent" && "智能体"}
+        {key == "tool" && "工具"}
+        {key == "model" && "模型"}
+        {key == "termination" && "终止条件"}
         <span className="text-xs font-light text-secondary">
           ({gallery.config.components[`${key}s` as CategoryKey].length})
         </span>
@@ -278,10 +282,12 @@ export const GalleryDetail: React.FC<{
       <div>
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-base font-medium">
-            {gallery.config.components[`${key}s` as CategoryKey].length}{" "}
-            {gallery.config.components[`${key}s` as CategoryKey].length === 1
-              ? key.charAt(0).toUpperCase() + key.slice(1)
-              : key.charAt(0).toUpperCase() + key.slice(1) + "s"}
+            {gallery.config.components[`${key}s` as CategoryKey].length}
+            {key == "team" && "个团队"}
+            {key == "agent" && "个智能体"}
+            {key == "tool" && "个工具"}
+            {key == "model" && "个模型"}
+            {key == "termination" && "个终止条件"}
           </h3>
           <Button
             type="primary"
@@ -291,7 +297,11 @@ export const GalleryDetail: React.FC<{
               handleAdd();
             }}
           >
-            {`Add ${key.charAt(0).toUpperCase() + key.slice(1)}`}
+            {key == "team" && "添加团队"}
+            {key == "agent" && "添加智能体"}
+            {key == "tool" && "添加工具"}
+            {key == "model" && "添加模型"}
+            {key == "termination" && "添加终止条件"}
           </Button>
         </div>
         <ComponentGrid
@@ -331,11 +341,12 @@ export const GalleryDetail: React.FC<{
             <div className="bg-tertiary backdrop-blur rounded p-2 flex items-center gap-2">
               <Package className="w-4 h-4 text-secondary" />
               <span className="text-sm">
+                包含
                 {Object.values(gallery.config.components).reduce(
                   (sum, arr) => sum + arr.length,
                   0
-                )}{" "}
-                components
+                )}
+                个组件
               </span>
             </div>
             <div className="bg-tertiary backdrop-blur rounded p-2 text-sm">

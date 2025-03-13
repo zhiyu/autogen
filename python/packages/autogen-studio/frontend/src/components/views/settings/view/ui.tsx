@@ -180,7 +180,7 @@ export const UISettingsPanel: React.FC<UISettingsPanelProps> = ({ userId }) => {
     <div className=" ">
       {contextHolder}
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-medium">UI Settings</h3>
+        <h3 className="text-lg font-medium">会话设置</h3>
         <div className="space-x-2 inline-flex">
           <Tooltip title="Reset to defaults">
             <Button
@@ -188,10 +188,10 @@ export const UISettingsPanel: React.FC<UISettingsPanelProps> = ({ userId }) => {
               onClick={handleReset}
               disabled={isSaving}
             >
-              Reset
+              重置
             </Button>
           </Tooltip>
-          <Tooltip title={isDirty ? "Save your changes" : "No unsaved changes"}>
+          <Tooltip title={isDirty ? "恢复默认" : "暂无更改"}>
             <Button
               type="primary"
               icon={
@@ -206,7 +206,7 @@ export const UISettingsPanel: React.FC<UISettingsPanelProps> = ({ userId }) => {
               disabled={!isDirty || isSaving}
               loading={isSaving}
             >
-              Save
+              保存
             </Button>
           </Tooltip>
         </div>
@@ -218,8 +218,8 @@ export const UISettingsPanel: React.FC<UISettingsPanelProps> = ({ userId }) => {
           onChange={(checked) =>
             handleSettingChange("show_llm_call_events", checked)
           }
-          label="Show LLM Events"
-          description="Display detailed LLM call logs in the message thread"
+          label="显示 LLM 事件"
+          description="在消息中显示详细的LLM调用日志。​"
           disabled={isSaving}
         />
 
@@ -228,8 +228,8 @@ export const UISettingsPanel: React.FC<UISettingsPanelProps> = ({ userId }) => {
           onChange={(checked) =>
             handleSettingChange("expanded_messages_by_default", checked)
           }
-          label="Expand Messages by Default"
-          description="Automatically expand message threads when they load"
+          label="默认展开消息内容"
+          description="加载时自动展开消息内容"
           disabled={isSaving}
         />
 
@@ -238,8 +238,8 @@ export const UISettingsPanel: React.FC<UISettingsPanelProps> = ({ userId }) => {
           onChange={(checked) =>
             handleSettingChange("show_agent_flow_by_default", checked)
           }
-          label="Show Agent Flow by Default"
-          description="Display the agent flow diagram automatically"
+          label="默认展示智能体工作流"
+          description="自动显示智能体任务执行流程图"
           disabled={isSaving}
         />
       </div>

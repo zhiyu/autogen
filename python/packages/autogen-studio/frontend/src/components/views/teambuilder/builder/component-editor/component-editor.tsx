@@ -291,7 +291,7 @@ export const ComponentEditor: React.FC<ComponentEditorProps> = ({
         <div className="flex justify-end gap-2 mt-6 pt-4 border-t border-secondary">
           <Button onClick={onClose}>Cancel</Button>
           <Button type="primary" onClick={handleSave}>
-            Save Changes
+            保存
           </Button>
         </div>
       )}

@@ -57,7 +57,7 @@ export const DeployManager: React.FC = () => {
         <div className="p-4 pt-2">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 mb-4 text-sm">
-            <span className="text-primary font-medium">Deploy</span>
+            <span className="text-primary font-medium">部署指南</span>
             {currentGuide && (
               <>
                 <ChevronRight className="w-4 h-4 text-secondary" />
@@ -66,8 +66,8 @@ export const DeployManager: React.FC = () => {
             )}
           </div>
           <div className="rounded border border-secondary border-dashed p-2 text-sm mb-4">
-            <TriangleAlert className="w-4 h-4 inline-block mr-2 -mt-1 text-secondary " />{" "}
-            The deployment guide section is work in progress.
+            <TriangleAlert className="w-4 h-4 inline-block mr-2 -mt-1 text-secondary " />
+            相关内容仍处于持续更新中。
           </div>
           {/* Content Area */}
           {currentGuide ? (

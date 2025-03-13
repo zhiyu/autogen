@@ -22,7 +22,7 @@ const TestDrawer = ({ isVisble, onClose, team }: TestDrawerProps) => {
   const createSession = async (teamId: number, teamName: string) => {
     if (!user?.email) return;
     try {
-      const defaultName = `Test Session ${teamName.substring(
+      const defaultName = `${teamName.substring(
         0,
         20
       )} - ${new Date().toLocaleString()} `;
@@ -75,9 +75,9 @@ const TestDrawer = ({ isVisble, onClose, team }: TestDrawerProps) => {
     <div>
       {contextHolder}
       <Drawer
-        title={<span>Test Team: {team.component.label}</span>}
+        title={<span>{team.component.label}</span>}
         size="large"
-        placement="right"
+        placement="bottom"
         onClose={handleClose}
         open={isVisble}
         extra={
@@ -85,12 +85,16 @@ const TestDrawer = ({ isVisble, onClose, team }: TestDrawerProps) => {
             checked={deleteOnClose}
             onChange={(e) => setDeleteOnClose(e.target.checked)}
           >
-            Delete session on close
+            关闭时删除会话
           </Checkbox>
         }
       >
         {loading && <p>Creating a test session...</p>}
-        {session && <ChatView session={session} />}
+        {session && (
+          <div className="h-[calc(100%-20px)]">
+            <ChatView session={session} />
+          </div>
+        )}
       </Drawer>
     </div>
   );

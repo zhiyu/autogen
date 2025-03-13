@@ -30,7 +30,7 @@ export const DeploySidebar: React.FC<DeploySidebarProps> = ({
   if (!isOpen) {
     return (
       <div className="h-full border-r border-secondary">
-        <div className="p-2 -ml-2">
+        <div className="p-2 pt-0 -ml-2">
           <Tooltip title="Documentation">
             <button
               onClick={onToggle}
@@ -45,17 +45,17 @@ export const DeploySidebar: React.FC<DeploySidebarProps> = ({
   }
 
   return (
-    <div className="h-full border-r border-secondary">
+    <div className="h-full border-r border-secondary px-2">
       {/* Header */}
-      <div className="flex items-center justify-between pt-0 p-4 pl-2 pr-2 border-b border-secondary">
+      <div className="flex items-center justify-between pt-0 py-4 ">
         <div className="flex items-center gap-2">
           {/* <Book className="w-4 h-4" /> */}
-          <span className="text-primary font-medium">Guides</span>
+          <span className="text-primary font-medium">部署指南</span>
           {/* <span className="px-2 py-0.5 text-xs bg-accent/10 text-accent rounded">
             {guides.length}
           </span> */}
         </div>
-        <Tooltip title="Close Sidebar">
+        <Tooltip title="关闭">
           <button
             onClick={onToggle}
             className="p-2 rounded-md hover:bg-secondary hover:text-accent text-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50"
@@ -81,17 +81,17 @@ export const DeploySidebar: React.FC<DeploySidebarProps> = ({
       )}
 
       {/* Guides List */}
-      <div className="overflow-y-auto h-[calc(100%-64px)] mt-4">
+      <div className="overflow-y-auto h-[calc(100%-64px)] pt-4 mr-2 border-t border-secondary">
         {guides.map((guide) => (
-          <div key={guide.id} className="relative">
+          <div key={guide.id} className="relative mb-1">
             <div
-              className={`absolute top-1 left-0.5 z-50 h-[calc(100%-8px)]
-               w-1 bg-opacity-80 rounded ${
+              className={`absolute top-1 left-[4px] z-50 h-[calc(100%-8px)]
+               w-[2px]  bg-opacity-80 rounded ${
                  currentGuide?.id === guide.id ? "bg-accent" : "bg-tertiary"
                }`}
             />
             <div
-              className={`group ml-1 flex flex-col p-2 rounded-l cursor-pointer hover:bg-secondary ${
+              className={`group ml-1 flex flex-col p-2 rounded cursor-pointer hover:bg-secondary ${
                 currentGuide?.id === guide.id
                   ? "border-accent bg-secondary"
                   : "border-transparent"

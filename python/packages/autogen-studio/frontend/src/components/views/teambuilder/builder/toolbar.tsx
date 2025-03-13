@@ -51,19 +51,19 @@ export const TeamBuilderToolbar: React.FC<TeamBuilderToolbarProps> = ({
   const menuItems: MenuProps["items"] = [
     {
       key: "autoLayout",
-      label: "Auto Layout",
+      label: "自动布局",
       icon: <LayoutGrid size={16} />,
       onClick: onAutoLayout,
     },
     {
       key: "grid",
-      label: "Show Grid",
+      label: "显示网格",
       icon: <Grid size={16} />,
       onClick: onToggleGrid,
     },
     {
       key: "minimap",
-      label: "Show Mini Map",
+      label: "显示缩略图",
       icon: <Map size={16} />,
       onClick: onToggleMiniMap,
     },
@@ -72,8 +72,8 @@ export const TeamBuilderToolbar: React.FC<TeamBuilderToolbarProps> = ({
   return (
     <div
       className={`${
-        isFullscreen ? "fixed top-6 right-6" : "absolute top-2 right-2"
-      } bg-secondary hover:bg-secondary rounded shadow-sm min-w-[200px] z-[60]`}
+        isFullscreen ? "fixed top-6 right-6" : "absolute top-4 right-4"
+      } bg-white rounded shadow-sm z-[60]`}
     >
       <div className="p-1 flex items-center gap-1">
         {!isJsonMode && (
@@ -97,9 +97,7 @@ export const TeamBuilderToolbar: React.FC<TeamBuilderToolbarProps> = ({
                 disabled={!canRedo}
               />
             </Tooltip>
-            <Tooltip
-              title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
-            >
+            <Tooltip title={isFullscreen ? "退出全屏" : "全屏模式"}>
               <Button
                 type="text"
                 icon={
@@ -115,32 +113,6 @@ export const TeamBuilderToolbar: React.FC<TeamBuilderToolbarProps> = ({
             </Tooltip>
           </>
         )}
-
-        <Tooltip title="Save Changes">
-          <Button
-            type="text"
-            icon={
-              <div className="relative">
-                <Save size={18} />
-                {isDirty && (
-                  <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
-                )}
-              </div>
-            }
-            className="p-1.5 hover:bg-primary/10 rounded-md text-primary/75 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={onSave}
-            // disabled={!isDirty}
-          />
-        </Tooltip>
-
-        <Tooltip title={isJsonMode ? "Switch to Visual" : "Switch to JSON"}>
-          <Button
-            type="text"
-            icon={isJsonMode ? <Cable size={18} /> : <Code2 size={18} />}
-            className="p-1.5 hover:bg-primary/10 rounded-md text-primary/75 hover:text-primary"
-            onClick={onToggleView}
-          />
-        </Tooltip>
 
         {!isJsonMode && (
           <Dropdown

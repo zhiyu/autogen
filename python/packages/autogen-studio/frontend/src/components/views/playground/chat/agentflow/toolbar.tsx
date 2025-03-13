@@ -77,7 +77,7 @@ export const AgentFlowToolbar: React.FC<AgentFlowToolbarProps> = ({
   return (
     <div className="absolute top-2 right-2 bg-secondary bg-opacity-70 hover:bg-secondary rounded backdrop-blur-sm z-50">
       <div className="p-1 flex items-center gap-1">
-        <Tooltip title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}>
+        <Tooltip title={isFullscreen ? "退出全屏" : "全屏模式"}>
           <Button
             type="text"
             icon={

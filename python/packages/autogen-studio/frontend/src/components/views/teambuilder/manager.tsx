@@ -180,10 +180,10 @@ export const TeamManager: React.FC = () => {
           isSidebarOpen ? "ml-64" : "ml-12"
         }`}
       >
-        <div className="p-4 pt-2">
+        <div className="relative w-full h-full">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 mb-4 text-sm">
-            <span className="text-primary font-medium">Teams</span>
+          <div className="flex items-center gap-2 mb-4 text-sm p-2 px-4">
+            <span className="text-primary font-medium">团队</span>
             {currentTeam && (
               <>
                 <ChevronRight className="w-4 h-4 text-secondary" />

@@ -100,7 +100,7 @@ export const GalleryCreateModal: React.FC<GalleryCreateModalProps> = ({
       key: "url",
       label: (
         <span className="flex items-center gap-2">
-          <Globe className="w-4 h-4" /> URL Import
+          <Globe className="w-4 h-4" /> 从 URL 导入
         </span>
       ),
       children: (
@@ -136,7 +136,7 @@ export const GalleryCreateModal: React.FC<GalleryCreateModalProps> = ({
             disabled={!url || isLoading}
             block
           >
-            Import from URL
+            从 URL 导入
           </Button>
         </div>
       ),
@@ -145,7 +145,7 @@ export const GalleryCreateModal: React.FC<GalleryCreateModalProps> = ({
       key: "file",
       label: (
         <span className="flex items-center gap-2">
-          <UploadIcon className="w-4 h-4" /> File Upload
+          <UploadIcon className="w-4 h-4" /> 上传文件
         </span>
       ),
       children: (
@@ -165,7 +165,7 @@ export const GalleryCreateModal: React.FC<GalleryCreateModalProps> = ({
       key: "paste",
       label: (
         <span className="flex items-center gap-2">
-          <Code className="w-4 h-4" /> Paste JSON
+          <Code className="w-4 h-4" /> 导入 JSON
         </span>
       ),
       children: (
@@ -180,7 +180,7 @@ export const GalleryCreateModal: React.FC<GalleryCreateModalProps> = ({
             />
           </div>
           <Button type="primary" onClick={handlePasteImport} block>
-            Import JSON
+            导入 JSON
           </Button>
         </div>
       ),
@@ -189,7 +189,7 @@ export const GalleryCreateModal: React.FC<GalleryCreateModalProps> = ({
 
   return (
     <Modal
-      title="Create New Gallery"
+      title="新建模板库"
       open={open}
       onCancel={onCancel}
       footer={null}

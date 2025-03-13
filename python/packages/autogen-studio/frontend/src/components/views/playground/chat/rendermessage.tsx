@@ -1,5 +1,5 @@
-import React from "react";
-import { User, Bot, DraftingCompass, Bug } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { User, UserRound, Bot, DraftingCompass, Bug } from "lucide-react";
 import {
   AgentMessageConfig,
   FunctionCall,
@@ -46,17 +46,14 @@ const RenderMultiModal: React.FC<{ content: (string | ImageContent)[] }> = ({
 const RenderToolCall: React.FC<{ content: FunctionCall[] }> = ({ content }) => (
   <div className="space-y-2">
     {content.map((call) => (
-      <div
-        key={call.id}
-        className="relative pl-3 border border-secondary rounded p-2"
-      >
-        <div className="absolute top-0 -left-0.5 w-1 bg-secondary h-full rounded"></div>
+      <div key={call.id} className="relative ml-4 pl-4 rounded">
+        <div className="absolute top-0 -left-0.5 w-[1px] bg-secondary h-full rounded"></div>
         <div className="font-medium">
           <DraftingCompass className="w-4 h-4 text-accent inline-block mr-1.5 -mt-0.5" />{" "}
-          Calling {call.name} tool with arguments
+          调用工具 {call.name}
         </div>
         <TruncatableText
-          content={JSON.stringify(call.arguments, null, 2)}
+          content={call.arguments}
           isJson={true}
           className="text-sm mt-1 bg-secondary p-2 rounded"
         />
@@ -70,15 +67,13 @@ const RenderToolResult: React.FC<{ content: FunctionExecutionResult[] }> = ({
 }) => (
   <div className="space-y-2">
     {content.map((result) => (
-      <div
-        key={result.call_id}
-        className="rounded p-2 pl-3 relative border border-secondary"
-      >
-        <div className="absolute top-0 -left-0.5 w-1 bg-secondary h-full rounded"></div>
+      <div key={result.call_id} className="rounded ml-4 pl-4 relative">
+        <div className="absolute top-0 -left-0.5 w-[1px] bg-secondary h-full rounded"></div>
         <div className="font-medium">
           <DraftingCompass className="w-4 text-accent h-4 inline-block mr-1.5 -mt-0.5" />{" "}
-          Tool Result
+          工具调用结果
         </div>
+
         <TruncatableText
           content={result.content}
           className="text-sm mt-1 bg-secondary p-2 border border-secondary rounded scroll overflow-x-scroll"
@@ -150,39 +145,40 @@ export const RenderMessage: React.FC<MessageProps> = ({
     <div
       className={`relative group ${!isLast ? "mb-2" : ""} ${className} ${
         isLLMEventMessage ? "border-accent" : ""
-      }`}
+      } ${isUser ? "flex flex-row-reverse" : ""}`}
     >
       <div
         className={`
-        flex items-start gap-2 p-2 rounded
-        ${isUser ? "bg-secondary" : "bg-tertiary"}
-        border border-secondary
+        flex items-start gap-2 rounded
+        ${isUser ? "flex-row-reverse items-center" : "flex-col "}
         transition-all duration-200
       `}
       >
         <div
           className={`
-          p-1.5 rounded bg-light 
+          flex items-center 
           ${isUser ? "text-accent" : "text-primary"}
         `}
         >
-          {isUser ? (
-            <User size={14} />
-          ) : message.source == "llm_call_event" ? (
-            <Bug size={14} />
-          ) : (
-            <Bot size={14} />
-          )}
-        </div>
-
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-primary">
-              {message.source}
-            </span>
+          <div className="p-1.5 rounded bg-light ">
+            {isUser ? (
+              <UserRound size={18} />
+            ) : message.source == "llm_call_event" ? (
+              <Bug size={18} />
+            ) : (
+              <Bot size={18} />
+            )}
           </div>
 
-          <div className="text-sm text-secondary">
+          <span className="ml-2 text-sm font-semibold text-primary">
+            {!isUser && message.source}
+          </span>
+        </div>
+
+        <div className="flex flex-col w-full">
+          <div
+            className={`text-sm text-secondary ${isUser ? "text-right" : ""}`}
+          >
             {messageUtils.isToolCallContent(content) ? (
               <RenderToolCall content={content} />
             ) : messageUtils.isMultiModalContent(content) ? (
@@ -192,20 +188,27 @@ export const RenderMessage: React.FC<MessageProps> = ({
             ) : message.source === "llm_call_event" ? (
               <LLMLogRenderer content={String(content)} />
             ) : (
-              <TruncatableText
-                content={String(content)}
-                className="break-all"
-              />
+              <div className="ml-4">
+                <div
+                  className={`${
+                    isUser ? "" : "border-secondary border-l-[1px]"
+                  } pl-5`}
+                >
+                  <TruncatableText
+                    content={String(content)}
+                    className="break-all"
+                  />
+                </div>
+              </div>
+            )}
+            {message.models_usage && (
+              <div className="text-xs text-secondary mt-2 ml-4">
+                {(message.models_usage.prompt_tokens || 0) +
+                  (message.models_usage.completion_tokens || 0)}{" "}
+                tokens
+              </div>
             )}
           </div>
-
-          {message.models_usage && (
-            <div className="text-xs text-secondary mt-1">
-              Tokens:{" "}
-              {(message.models_usage.prompt_tokens || 0) +
-                (message.models_usage.completion_tokens || 0)}
-            </div>
-          )}
         </div>
       </div>
     </div>

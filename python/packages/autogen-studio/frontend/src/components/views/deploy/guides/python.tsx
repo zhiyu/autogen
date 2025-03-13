@@ -7,15 +7,15 @@ const PythonGuide: React.FC = () => {
   return (
     <div className="">
       <h1 className="tdext-2xl font-bold mb-6">
-        Using AutoGen Studio Teams in Python Code and REST API
+        在 Python 代码和 REST API 中使用
       </h1>
 
       <Alert
         className="mb-6"
-        message="Prerequisites"
+        message="先决条件"
         description={
           <ul className="list-disc pl-4 mt-2 space-y-1">
-            <li>AutoGen Studio installed</li>
+            <li>AutoGen Studio 已安装</li>
           </ul>
         }
         type="info"
@@ -23,16 +23,16 @@ const PythonGuide: React.FC = () => {
 
       <div className="my-3 text-sm">
         {" "}
-        You can reuse the declarative specifications of agent teams created in
-        AutoGen studio in your python application by using the TeamManager
-        class. . In TeamBuilder, select a team configuration and click download.{" "}
+        您可以在 Python 应用程序中通过使用 TeamManager 类来复用在 AutoGen
+        工作室中创建的代理团队的声明式规范。在 TeamBuilder
+        中，选择一个团队配置并点击下载。
         <Download className="h-4 w-4 inline-block" />{" "}
       </div>
 
       {/* Basic Usage */}
       <CodeSection
-        title="1. Build Your Team in Python, Export as JSON"
-        description="Here is an example of building an Agent Team in python and exporting it as a JSON file."
+        title="1. 用 Python 构建团队，以 JSON 格式导出"
+        description="以下是一个在 Python 中构建团队并将其导出为 JSON 文件的示例。"
         code={`
 from autogen_agentchat.agents import AssistantAgent
 from autogen_agentchat.teams import RoundRobinGroupChat
@@ -56,8 +56,8 @@ print(config.model_dump_json())`}
       <div className="space-y-6">
         {/* Basic Usage */}
         <CodeSection
-          title="2. Run a Team in Python"
-          description="Here's a simple example of using the TeamManager class from AutoGen Studio in your python code."
+          title="2. 在 Python 运行团队"
+          description="以下是在您的 Python 代码中使用 AutoGen Studio 中的 TeamManager 类的一个简单示例。"
           code={`
 from autogenstudio.teammanager import TeamManager
 
@@ -74,10 +74,11 @@ print(result)`}
         />
 
         <CodeSection
-          title="3. Serve a Team as a REST API"
+          title="3. 以 REST API 的形式提供服务"
           description=<div>
-            AutoGen Studio offers a convenience CLI command to serve a team as a
-            REST API endpoint.{" "}
+            AutoGen Studio
+            提供了一个便捷的命令行界面（CLI）命令，可为团队提供一个 REST API
+            端点。
           </div>
           code={`
 autogenstudio serve --team path/to/team.json --port 8084  

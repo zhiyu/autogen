@@ -8,6 +8,8 @@ import {
 import * as React from "react";
 import { IStatus } from "../../../types/app";
 
+import { Send, LoaderCircle } from "lucide-react";
+
 interface ChatInputProps {
   onSubmit: (text: string) => void;
   loading: boolean;
@@ -72,14 +74,14 @@ export default function ChatInput({
   };
 
   return (
-    <div className="mt-2 w-full">
+    <div className="mt-2 w-full mb-4">
       <div
-        className={`mt-2 rounded shadow-sm flex mb-1 ${
+        className={`mt-2 rounded shadow-sm flex mb-1 mr-2 ${
           isInputDisabled ? "opacity-50" : ""
         }`}
       >
         <form
-          className="flex-1 relative"
+          className="flex-1 relative items-center"
           onSubmit={(e) => {
             e.preventDefault();
             handleSubmit();
@@ -89,32 +91,31 @@ export default function ChatInput({
             id="queryInput"
             name="queryInput"
             ref={textAreaRef}
-            defaultValue={"what is the height of the eiffel tower"}
+            defaultValue={""}
             onChange={handleTextChange}
             onKeyDown={handleKeyDown}
-            className={`flex items-center w-full resize-none text-gray-600 rounded border border-accent bg-white p-2 pl-5 pr-16 ${
+            className={`flex items-center w-full resize-none text-gray-600 rounded border border-gray bg-white px-4 py-5 pr-16 ${
               isInputDisabled ? "cursor-not-allowed" : ""
             }`}
             style={{
               maxHeight: "120px",
               overflowY: "auto",
-              minHeight: "50px",
             }}
-            placeholder="Type your message here..."
+            placeholder="请输入..."
             disabled={isInputDisabled}
           />
           <button
             type="button"
             onClick={handleSubmit}
             disabled={isInputDisabled}
-            className={`absolute right-3 bottom-2 bg-accent transition duration-300 rounded flex justify-center items-center w-11 h-9 ${
+            className={`absolute right-3 bottom-4  transition duration-300 rounded flex justify-center items-center w-12 h-8 ${
               isInputDisabled ? "cursor-not-allowed" : "hover:brightness-75"
             }`}
           >
             {loading ? (
-              <Cog6ToothIcon className="text-white animate-spin rounded-full h-6 w-6" />
+              <LoaderCircle className="text-accent animate-spin h-6 w-6" />
             ) : (
-              <PaperAirplaneIcon className="h-6 w-6 text-white" />
+              <Send className="h-6 w-6 text-accent" />
             )}
           </button>
         </form>

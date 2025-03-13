@@ -41,12 +41,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   if (!isOpen) {
     return (
-      <div className="h-full  border-r border-secondary">
-        <div className="p-2 -ml-2 ">
+      <div className="h-full border-r border-secondary">
+        <div className="p-2 pt-0 -ml-2 ">
           <Tooltip
             title=<span>
-              Sessions{" "}
-              <span className="text-accent mx-1"> {sessions.length} </span>{" "}
+              会话 <span className="text-accent mx-1"> {sessions.length} </span>{" "}
             </span>
           >
             <button
@@ -58,7 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </Tooltip>
         </div>
         <div className="mt-4 px-2 -ml-1">
-          <Tooltip title="Create new session">
+          <Tooltip title="新建会话">
             <Button
               type="text"
               className="w-full p-2 flex justify-center"
@@ -72,15 +71,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
   }
 
   return (
-    <div className="h-full border-r border-secondary ">
-      <div className="flex items-center justify-between pt-0 p-4 pl-2 pr-2 border-b border-secondary">
+    <div className="h-full border-r border-secondary px-2">
+      <div className="flex items-center justify-between pt-0 py-4">
         <div className="flex items-center gap-2">
-          <span className="text-primary font-medium">Sessions</span>
+          <span className="text-primary font-medium">会话</span>
           <span className="px-2 py-0.5 text-xs bg-accent/10 text-accent rounded">
             {sessions.length}
           </span>
         </div>
-        <Tooltip title="Close Sidebar">
+        <Tooltip title="关闭">
           <button
             onClick={onToggle}
             className="p-2 rounded-md hover:bg-secondary hover:text-accent text-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50"
@@ -90,22 +89,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </Tooltip>
       </div>
 
-      <div className="my-4 flex text-sm  ">
-        <div className=" mr-2 w-full pr-2">
-          {isOpen && (
-            <NewSessionControls
-              teams={teams}
-              isLoading={isLoading}
-              onStartSession={onStartSession}
-            />
-          )}
-        </div>
+      <div className="py-4 flex text-sm mr-2 border-t border-secondary">
+        {isOpen && (
+          <NewSessionControls
+            teams={teams}
+            isLoading={isLoading}
+            onStartSession={onStartSession}
+          />
+        )}
       </div>
 
       <div className="py-2 flex text-sm text-secondary">
         <History className="w-4 h-4 inline-block mr-1.5" />
         <div className="inline-block -mt-0.5">
-          Recents{" "}
+          最近{" "}
           <span className="text-accent text-xs mx-1 mt-0.5">
             {" "}
             ({sessions.length}){" "}
@@ -126,19 +123,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       )}
 
-      <div className="overflow-y-auto   scroll   h-[calc(100%-181px)]">
+      <div className="overflow-y-auto scroll h-[calc(100%-181px)] mr-2">
         {sessions.map((s) => (
-          <div key={s.id} className="relative">
+          <div key={s.id} className="relative mb-1">
             <div
-              className={`bg-accent absolute top-1 left-0.5 z-50 h-[calc(100%-8px)]
-               w-1 bg-opacity-80  rounded ${
+              className={`bg-accent absolute top-1 left-[4px] z-50 h-[calc(100%-8px)]
+               w-[2px] bg-opacity-80  rounded ${
                  currentSession?.id === s.id ? "bg-accent" : "bg-tertiary"
                }`}
             >
               {" "}
             </div>
             <div
-              className={`group ml-1 flex items-center justify-between rounded-l p-2 py-1 text-sm cursor-pointer hover:bg-tertiary ${
+              className={`group ml-1 flex items-center justify-between rounded p-2 py-1 text-sm cursor-pointer hover:bg-tertiary ${
                 currentSession?.id === s.id ? "border-accent bg-secondary" : ""
               }`}
               onClick={() => onSelectSession(s)}
@@ -150,7 +147,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </span>
               </div>
               <div className="py-3 flex gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Tooltip title="Edit session">
+                <Tooltip title="编辑会话">
                   <Button
                     type="text"
                     size="small"
@@ -162,7 +159,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     }}
                   />
                 </Tooltip>
-                <Tooltip title="Delete session">
+                <Tooltip title="删除会话">
                   <Button
                     type="text"
                     size="small"

@@ -54,7 +54,7 @@ export const TeamSidebar: React.FC<TeamSidebarProps> = ({
   if (!isOpen) {
     return (
       <div className="h-full border-r border-secondary">
-        <div className="p-2 -ml-2">
+        <div className="p-2 pt-0 -ml-2">
           <Tooltip title={`Teams (${teams.length})`}>
             <button
               onClick={onToggle}
@@ -94,11 +94,11 @@ export const TeamSidebar: React.FC<TeamSidebarProps> = ({
 
   // Render expanded state
   return (
-    <div className="h-full border-r border-secondary">
+    <div className="h-full border-r border-secondary px-2">
       {/* Header */}
-      <div className="flex items-center justify-between pt-0 p-4 pl-2 pr-2 border-b border-secondary">
+      <div className="flex items-center justify-between pt-0 py-4 ">
         <div className="flex items-center gap-2">
-          <span className="text-primary font-medium">Teams</span>
+          <span className="text-primary font-medium">团队</span>
           <span className="px-2 py-0.5 text-xs bg-accent/10 text-accent rounded">
             {teams.length}
           </span>
@@ -114,8 +114,8 @@ export const TeamSidebar: React.FC<TeamSidebarProps> = ({
       </div>
 
       {/* Create Team Button */}
-      <div className="my-4 flex text-sm">
-        <div className="mr-2 w-full">
+      <div className="py-4 border-t border-secondary mr-2 flex text-sm">
+        <div className="w-full">
           <Tooltip title="Create a new team">
             <Button
               type="primary"
@@ -124,24 +124,24 @@ export const TeamSidebar: React.FC<TeamSidebarProps> = ({
               onClick={createTeam}
               disabled={!selectedGallery?.config.components?.teams?.length}
             >
-              New Team
+              创建团队
             </Button>
           </Tooltip>
         </div>
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex border-b border-secondary">
+      <div className="flex border-b border-secondary mr-2">
         <button
-          className={`flex items-center px-2 py-1 text-sm font-medium ${
+          className={`flex items-center px-2 py-2 text-sm font-medium ${
             activeTab === "recent"
-              ? "text-accent border-b-2 border-accent"
+              ? "text-accent border-accent"
               : "text-secondary hover:text-primary"
           }`}
           onClick={() => setActiveTab("recent")}
         >
           <History className="w-4 h-4 mr-1.5" />
-          Recents
+          最新
           <span className="ml-1 text-xs">({teams.length})</span>
           {isLoading && activeTab === "recent" && (
             <RefreshCcw className="w-4 h-4 ml-2 animate-spin" />
@@ -150,13 +150,13 @@ export const TeamSidebar: React.FC<TeamSidebarProps> = ({
         <button
           className={`flex items-center px-4 py-2 text-sm font-medium ${
             activeTab === "gallery"
-              ? "text-accent border-b-2 border-accent"
+              ? "text-accent  border-accent"
               : "text-secondary hover:text-primary"
           }`}
           onClick={() => setActiveTab("gallery")}
         >
           <GalleryHorizontalEnd className="w-4 h-4 mr-1.5" />
-          Gallery
+          模版库
           {isLoadingGalleries && activeTab === "gallery" && (
             <RefreshCcw className="w-4 h-4 ml-2 animate-spin" />
           )}
@@ -166,7 +166,7 @@ export const TeamSidebar: React.FC<TeamSidebarProps> = ({
       <div className="scroll overflow-y-auto h-[calc(100%-200px)]">
         {/* Recents Tab Content */}
         {activeTab === "recent" && (
-          <div className="pt-2">
+          <div className="pt-4 mr-2">
             {!isLoading && teams.length === 0 && (
               <div className="p-2 mr-2 text-center text-secondary text-sm border border-dashed rounded">
                 <InfoIcon className="w-4 h-4 inline-block mr-1.5 -mt-0.5" />
@@ -177,17 +177,17 @@ export const TeamSidebar: React.FC<TeamSidebarProps> = ({
             {teams.length > 0 && (
               <div className={isLoading ? "pointer-events-none" : ""}>
                 {teams.map((team) => (
-                  <div key={team.id} className="relative border-secondary">
+                  <div key={team.id} className="relative border-secondary mb-1">
                     <div
-                      className={`absolute top-1 left-0.5 z-50 h-[calc(100%-8px)]
-                        w-1 bg-opacity-80 rounded ${
+                      className={`absolute top-1 left-[4px] z-50 h-[calc(100%-8px)]
+                        w-[2px] bg-opacity-80 rounded ${
                           currentTeam?.id === team.id
                             ? "bg-accent"
                             : "bg-tertiary"
                         }`}
                     />
                     <div
-                      className={`group ml-1 flex flex-col p-3 rounded-l cursor-pointer hover:bg-secondary ${
+                      className={`group ml-1 flex flex-col p-3 rounded cursor-pointer hover:bg-secondary ${
                         currentTeam?.id === team.id
                           ? "border-accent bg-secondary"
                           : "border-transparent"
@@ -226,8 +226,8 @@ export const TeamSidebar: React.FC<TeamSidebarProps> = ({
                           <span>
                             {team.component.config.participants.length}{" "}
                             {team.component.config.participants.length === 1
-                              ? "agent"
-                              : "agents"}
+                              ? "个智能体"
+                              : "个智能体"}
                           </span>
                         </div>
                       </div>
@@ -248,10 +248,10 @@ export const TeamSidebar: React.FC<TeamSidebarProps> = ({
 
         {/* Gallery Tab Content */}
         {activeTab === "gallery" && (
-          <div className="p-2">
+          <div className="mt-2 mr-2">
             {/* Gallery Selector */}
             <Select
-              className="w-full mb-4"
+              className="w-full mt-2 mb-4"
               placeholder="Select gallery"
               value={selectedGallery?.id}
               onChange={(value) => {
@@ -269,13 +269,13 @@ export const TeamSidebar: React.FC<TeamSidebarProps> = ({
             {selectedGallery?.config.components?.teams.map((galleryTeam) => (
               <div
                 key={galleryTeam.label + galleryTeam.component_type}
-                className="relative border-secondary"
+                className="relative border-secondary mb-1"
               >
                 <div
-                  className={`absolute top-1 left-0.5 z-50 h-[calc(100%-8px)]
-                  w-1 bg-opacity-80 rounded bg-tertiary`}
+                  className={`absolute top-1 left-[4px] z-50 h-[calc(100%-8px)]
+                  w-[2px] bg-opacity-80 rounded bg-tertiary`}
                 />
-                <div className="group ml-1 flex flex-col p-3 rounded-l cursor-pointer hover:bg-secondary">
+                <div className="group flex flex-col p-3 rounded cursor-pointer hover:bg-secondary">
                   {/* Team Name and Use Template Action */}
                   <div className="flex items-center justify-between">
                     <span className="font-medium truncate">
@@ -315,8 +315,8 @@ export const TeamSidebar: React.FC<TeamSidebarProps> = ({
                       <span>
                         {galleryTeam.config.participants.length}{" "}
                         {galleryTeam.config.participants.length === 1
-                          ? "agent"
-                          : "agents"}
+                          ? "个智能体"
+                          : "个智能体"}
                       </span>
                     </div>
                   </div>

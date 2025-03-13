@@ -1,0 +1,17 @@
+{
+  "appName": "Agent Studio",
+  "appSlogan": "智能规划，高效执行！",
+  "navigation": {
+    "team": "团队",
+    "playground": "会话",
+    "gallery": "模板库",
+    "deploy": "部署"
+  },
+  "pages": {
+    "index": {},
+    "build": {
+      "create": ""
+    },
+    "deploy": {}
+  }
+}

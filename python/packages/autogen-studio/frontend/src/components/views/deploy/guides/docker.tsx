@@ -5,14 +5,14 @@ import { CodeSection, copyToClipboard } from "./guides";
 const DockerGuide: React.FC = () => {
   return (
     <div className="max-w-4xl">
-      <h1 className="tdext-2xl font-bold mb-6">Docker Container Setup</h1>
+      <h1 className="tdext-2xl font-bold mb-6">Docker 容器部署</h1>
 
       <Alert
         className="mb-6"
-        message="Prerequisites"
+        message="先决条件"
         description={
           <ul className="list-disc pl-4 mt-2 space-y-1">
-            <li>Docker installed on your system</li>
+            <li>您的系统已安装DOcker</li>
           </ul>
         }
         type="info"
@@ -20,7 +20,7 @@ const DockerGuide: React.FC = () => {
       <CodeSection
         title="1. Dockerfile"
         description=<div>
-          AutoGen Studio provides a
+          系统提供了
           <a
             href="https://github.com/microsoft/autogen/blob/main/python/packages/autogen-studio/Dockerfile"
             target="_blank"
@@ -29,7 +29,7 @@ const DockerGuide: React.FC = () => {
           >
             Dockerfile
           </a>
-          that you can use to build your Docker container.{" "}
+          一个 Dockerfile，您可以使用它来构建您的 Docker 容器。
         </div>
         code={`FROM mcr.microsoft.com/devcontainers/python:3.10
 
@@ -53,8 +53,8 @@ CMD gunicorn -w $((2 * $(getconf _NPROCESSORS_ONLN) + 1)) --timeout 12600 -k uvi
 
       {/* Build and Run */}
       <CodeSection
-        title="2. Build and Run"
-        description="Build and run your Docker container:"
+        title="2. 构建并运行"
+        description="构建并运行您的 Docker 容器："
         code={`docker build -t autogenstudio .
 docker run -p 8000:8000 autogenstudio`}
         onCopy={copyToClipboard}

@@ -10,9 +10,22 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   GalleryHorizontalEnd,
+  GalleryVerticalEnd,
   Rocket,
 } from "lucide-react";
+
+import {
+  BellIcon,
+  MoonIcon,
+  SunIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
+
+import { appContext } from "../hooks/provider";
+
 import Icon from "./icons";
+
+import { useTranslation } from "react-i18next";
 
 interface INavItem {
   name: string;
@@ -27,28 +40,28 @@ interface INavItem {
 
 const navigation: INavItem[] = [
   {
-    name: "Team Builder",
+    name: "team",
     href: "/build",
     icon: Bot,
-    breadcrumbs: [{ name: "Team Builder", href: "/build", current: true }],
+    breadcrumbs: [{ name: "团队", href: "/build", current: true }],
   },
   {
-    name: "Playground",
+    name: "playground",
     href: "/",
     icon: MessagesSquare,
-    breadcrumbs: [{ name: "Playground", href: "/", current: true }],
+    breadcrumbs: [{ name: "会话", href: "/", current: true }],
   },
   {
-    name: "Gallery",
+    name: "gallery",
     href: "/gallery",
-    icon: GalleryHorizontalEnd,
-    breadcrumbs: [{ name: "Gallery", href: "/gallery", current: true }],
+    icon: GalleryVerticalEnd,
+    breadcrumbs: [{ name: "模板库", href: "/gallery", current: true }],
   },
   {
-    name: "Deploy",
+    name: "deploy",
     href: "/deploy",
     icon: Rocket,
-    breadcrumbs: [{ name: "Deploy", href: "/deploy", current: true }],
+    breadcrumbs: [{ name: "部署", href: "/deploy", current: true }],
   },
 ];
 
@@ -96,16 +109,19 @@ const Sidebar = ({ link, meta, isMobile }: SidebarProps) => {
       });
     } else if (path === "/settings") {
       setHeader({
-        title: "Settings",
-        breadcrumbs: [{ name: "Settings", href: "/settings", current: true }],
+        title: "设置",
+        breadcrumbs: [{ name: "设置", href: "/settings", current: true }],
       });
     }
   };
 
+  const { darkMode, setDarkMode, user, logout } = React.useContext(appContext);
+
+  const { t, i18n } = useTranslation();
   return (
     <div
       className={classNames(
-        "flex grow border z-50  flex-col gap-y-5 overflow-y-auto border-r border-secondary bg-primary",
+        "flex grow z-50  flex-col gap-y-5 overflow-y-auto border-r border-secondary bg-primary",
         "transition-all duration-300 ease-in-out",
         showFull ? "w-72 px-6" : "w-16 px-2"
       )}
@@ -122,11 +138,36 @@ const Sidebar = ({ link, meta, isMobile }: SidebarProps) => {
           <Icon icon="app" size={8} />
         </Link>
         {showFull && (
-          <div className="flex flex-col" style={{ minWidth: "200px" }}>
-            <span className="text-base font-semibold text-primary">
-              {meta?.title}
-            </span>
-            <span className="text-xs text-secondary">{meta?.description}</span>
+          <div
+            className="flex items-center justify-between"
+            style={{ minWidth: "200px" }}
+          >
+            <div className="flex flex-col">
+              <span className="text-base font-semibold text-primary">
+                {t("appName")}
+              </span>
+              <span className="text-xs text-secondary">{t("appSlogan")}</span>
+            </div>
+            <div className="flex items-center">
+              {/* Dark Mode Toggle */}
+              <button
+                onClick={() =>
+                  setDarkMode(darkMode === "dark" ? "light" : "dark")
+                }
+                className="text-secondary hover:text-primary ml-2"
+              >
+                {darkMode === "dark" ? (
+                  <MoonIcon className="h-5 w-5" />
+                ) : (
+                  <SunIcon className="h-5 w-5" />
+                )}
+              </button>
+
+              {/* Notifications */}
+              <button className="text-secondary hidden hover:text-primary">
+                <BellIcon className="h-5 w-5" />
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -150,16 +191,14 @@ const Sidebar = ({ link, meta, isMobile }: SidebarProps) => {
                 const navLink = (
                   <div className="relative">
                     {isActive && (
-                      <div className="bg-accent absolute top-1 left-0.5 z-50 h-8 w-1 bg-opacity-80  rounded">
-                        {" "}
-                      </div>
+                      <div className="bg-accent absolute top-1 left-[4px] z-50 h-8 w-[2px] bg-opacity-80  rounded"></div>
                     )}
                     <Link
                       to={item.href}
                       onClick={() => handleNavClick(item)}
                       className={classNames(
                         // Base styles
-                        "group  ml-1 flex gap-x-3 rounded-md mr-2  p-2 text-sm font-medium",
+                        "group  ml-1 flex items-center gap-x-3 rounded-md mr-2  p-2 text-sm font-medium",
                         !showFull && "justify-center",
                         // Color states
                         isActive
@@ -167,7 +206,6 @@ const Sidebar = ({ link, meta, isMobile }: SidebarProps) => {
                           : "text-secondary hover:bg-tertiary hover:text-accent"
                       )}
                     >
-                      {" "}
                       <IconComponent
                         className={classNames(
                           "h-6 w-6 shrink-0",
@@ -176,7 +214,7 @@ const Sidebar = ({ link, meta, isMobile }: SidebarProps) => {
                             : "text-secondary group-hover:text-accent"
                         )}
                       />
-                      {showFull && item.name}
+                      {showFull && t("navigation." + item.name)}
                     </Link>
                   </div>
                 );
@@ -184,7 +222,10 @@ const Sidebar = ({ link, meta, isMobile }: SidebarProps) => {
                 return (
                   <li key={item.name}>
                     {!showFull && !isMobile ? (
-                      <Tooltip title={item.name} placement="right">
+                      <Tooltip
+                        title={t("navigation." + item.name)}
+                        placement="right"
+                      >
                         {navLink}
                       </Tooltip>
                     ) : (
@@ -205,15 +246,15 @@ const Sidebar = ({ link, meta, isMobile }: SidebarProps) => {
           >
             {!showFull && !isMobile ? (
               <>
-                <Tooltip title="Settings" placement="right">
+                <Tooltip title="设置" placement="right">
                   <Link
                     to="/settings"
                     onClick={() =>
                       setHeader({
-                        title: "Settings",
+                        title: "设置",
                         breadcrumbs: [
                           {
-                            name: "Settings",
+                            name: "设置",
                             href: "/settings",
                             current: true,
                           },
@@ -254,20 +295,20 @@ const Sidebar = ({ link, meta, isMobile }: SidebarProps) => {
                       to="/settings"
                       onClick={() =>
                         setHeader({
-                          title: "Settings",
+                          title: "设置",
                           breadcrumbs: [
                             {
-                              name: "Settings",
+                              name: "设置",
                               href: "/settings",
                               current: true,
                             },
                           ],
                         })
                       }
-                      className="group flex flex-1 gap-x-3 rounded-md p-2 text-sm font-medium text-primary hover:text-accent hover:bg-secondary"
+                      className="group flex items-center flex-1 gap-x-3 rounded-md p-2 text-sm font-medium text-primary hover:text-accent hover:bg-secondary"
                     >
                       <Settings className="h-6 w-6 shrink-0 text-secondary group-hover:text-accent" />
-                      {showFull && "Settings"}
+                      {showFull && "设置"}
                     </Link>
                   </div>
                 </div>

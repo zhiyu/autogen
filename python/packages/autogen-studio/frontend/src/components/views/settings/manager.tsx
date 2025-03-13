@@ -66,17 +66,21 @@ export const SettingsManager: React.FC = () => {
       label: (
         <span className="flex items-center gap-2">
           <Palette className="w-4 h-4" />
-          UI Settings
+          会话
         </span>
       ),
-      children: <UISettingsPanel userId={userId} />,
+      children: (
+        <div className="mt-4">
+          <UISettingsPanel userId={userId} />
+        </div>
+      ),
     },
     {
       key: "model",
       label: (
         <span className="flex items-center gap-2">
           <Brain className="w-4 h-4" />
-          Default Model
+          模型
         </span>
       ),
       children: (
@@ -93,7 +97,7 @@ export const SettingsManager: React.FC = () => {
       label: (
         <span className="flex items-center gap-2">
           <Variable className="w-4 h-4" />
-          Environment Variables
+          环境变量
         </span>
       ),
       children: (
@@ -112,48 +116,20 @@ export const SettingsManager: React.FC = () => {
   return (
     <div className="relative flex h-full w-full">
       <div
-        className={`absolute left-0 top-0 h-full transition-all duration-200 ease-in-out ${
-          isSidebarOpen ? "w-64" : "w-12"
-        }`}
-      >
-        <SettingsSidebar
-          isOpen={isSidebarOpen}
-          sections={[
-            {
-              id: "settings",
-              title: "Settings",
-              icon: Variable,
-              content: () => <></>,
-            },
-          ]}
-          currentSection={{
-            id: "settings",
-            title: "Settings",
-            icon: Variable,
-            content: () => <></>,
-          }}
-          onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
-          onSelectSection={() => {}}
-        />
-      </div>
-
-      <div
         className={`flex-1 transition-all max-w-5xl -mr-6 duration-200 ${
-          isSidebarOpen ? "ml-64" : "ml-12"
+          isSidebarOpen ? "ml-0" : "ml-12"
         }`}
       >
         <div className="p-4 pt-2">
           <div className="flex items-center gap-2 mb-4 text-sm">
-            <span className="text-primary font-medium">Settings</span>
+            <span className="text-primary font-medium">设置</span>
           </div>
 
           <div className="flex items-center gap-2 mb-8 text-sm">
-            <span className="text-secondary">
-              Manage your settings and preferences
-            </span>
+            <span className="text-secondary">管理您的设置和偏好</span>
           </div>
 
-          <div className="  rounded-lg shadow-sm">
+          <div className="rounded-lg">
             <Tabs
               defaultActiveKey="ui"
               items={tabItems}

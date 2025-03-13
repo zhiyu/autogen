@@ -108,6 +108,7 @@ const RunView: React.FC<RunViewProps> = ({
 
   const visibleMessages = useMemo(() => {
     if (uiSettings.show_llm_call_events) {
+      console.log("uiSettings.show_llm_call_events:" + true);
       return run.messages;
     }
     return run.messages.filter((msg) => msg.config.source !== "llm_call_event");
@@ -145,8 +146,7 @@ const RunView: React.FC<RunViewProps> = ({
               size={20}
               className="inline-block mr-1 text-accent animate-spin"
             />
-            <span className="inline-block mr-2 ml-1 ">Processing</span>
-            <LoadingDots size={8} />
+            <span className="inline-block mr-2 ml-1">任务执行中 ...</span>
           </div>
         );
       case "awaiting_input":
@@ -164,7 +164,7 @@ const RunView: React.FC<RunViewProps> = ({
         return (
           <div className="text-sm mb-2">
             <CheckCircle size={20} className="inline-block mr-2 text-accent" />
-            Task completed
+            任务完成
           </div>
         );
       case "error":
@@ -181,7 +181,7 @@ const RunView: React.FC<RunViewProps> = ({
         return (
           <div className="text-sm mb-2">
             <StopCircle size={20} className="inline-block mr-2 text-red-500" />
-            Task was stopped
+            任务已终止
           </div>
         );
       default:
@@ -195,12 +195,8 @@ const RunView: React.FC<RunViewProps> = ({
   return (
     <div className="space-y-6  mr-2 ">
       {/* Run Header */}
-      <div
-        className={`${
-          isFirstRun ? "mb-2" : "mt-4"
-        } mb-4 pb-2 pt-2 border-b border-dashed border-secondary`}
-      >
-        <div className="text-xs text-secondary">
+      <div className={`${isFirstRun ? "mb-2" : "mt-4"} mb-4 pb-2 pt-2`}>
+        <div className="text-xs text-secondary flex flex-row-reverse text-right">
           <Tooltip
             title={
               <div className="text-xs">
@@ -211,205 +207,190 @@ const RunView: React.FC<RunViewProps> = ({
             }
           >
             <span className="cursor-help">
-              Run ...{run.id} | {getRelativeTimeString(run?.created_at || "")}{" "}
+              {getRelativeTimeString(run?.created_at || "")}{" "}
             </span>
           </Tooltip>
-          {!isFirstRun && (
-            <>
-              {" "}
-              |{" "}
-              <TriangleAlertIcon className="w-4 h-4 -mt-1 inline-block mr-1 ml-1" />
-              Note: Each run does not share data with previous runs in the same
-              session yet.
-            </>
-          )}
         </div>
       </div>
 
-      {/* User Message */}
-      <div className="flex flex-col items-end w-full">
-        <div className="w-full">
-          <RenderMessage message={run.task} isLast={false} />
-        </div>
-      </div>
-
-      {/* Team Response */}
-      <div className="flex flex-col items-start">
-        <div className="flex items-center gap-2 mb-1">
-          <div className="p-1.5 rounded bg-secondary text-primary">
-            <Bot size={20} />
+      <div className="grid grid-cols-1">
+        <div>
+          {/* User Message */}
+          <div className="flex flex-col items-end w-full">
+            <div className="w-full">
+              <RenderMessage message={run.task} isLast={false} />
+            </div>
           </div>
-          <span className="text-sm font-medium text-primary">Agent Team</span>
-        </div>
 
-        <div className="   w-full">
-          {/* Main Response Container */}
-          <div className="p-4 bg-secondary border border-secondary rounded">
-            <div className="flex justify-between items-start mb-2">
-              <div className="text-primary">{getStatusIcon(run.status)}</div>
-
-              {/* Cancel Button - More prominent placement */}
-              {isActive && onCancel && (
-                <button
-                  onClick={onCancel}
-                  className="px-4 text-sm py-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors flex items-center gap-2"
-                >
-                  <StopCircle size={16} />
-                  Cancel Run
-                </button>
-              )}
+          {/* Team Response */}
+          <div className="flex flex-col items-start">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="p-1.5 rounded bg-secondary text-primary">
+                <Bot size={20} />
+              </div>
+              <span className="text-sm font-medium text-primary">
+                {teamConfig && teamConfig.label}团队
+              </span>
             </div>
 
-            {/* Final Response */}
-            {run.status !== "awaiting_input" && run.status !== "active" && (
-              <div className="text-sm break-all">
-                <div className="text-xs bg-tertiary mb-1 text-secondary border-secondary -mt-2 bdorder rounded p-2">
-                  Stop reason: {run.team_result?.task_result?.stop_reason}
-                </div>
+            <div className="w-full">
+              {/* Main Response Container */}
+              <div className="mt-2 border border-secondary p-4 rounded">
+                <div className="flex justify-between items-center">
+                  <div className="text-primary">
+                    {getStatusIcon(run.status)}
+                  </div>
 
-                {lastMessage ? (
-                  <RenderMessage message={lastMessage.config} isLast={true} />
-                ) : (
-                  <>
-                    {lastResultMessage && (
-                      <RenderMessage message={lastResultMessage} />
-                    )}
-                  </>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Thread Section */}
-          <div className="">
-            {visibleMessages.length > 0 && (
-              <div className="mt-2 pl-4 border-secondary rounded-b border-l-2 border-secondary/30">
-                <div className="flex pt-2">
-                  <div className="flex-1">
+                  {/* Cancel Button - More prominent placement */}
+                  {isActive && onCancel && (
                     <button
-                      onClick={() => setIsExpanded(!isExpanded)}
-                      className="flex items-center gap-1 text-sm text-secondary hover:text-primary transition-colors"
+                      onClick={onCancel}
+                      className="px-2 text-xs py-1 bg-red-500 hover:bg-red-600 text-white rounded transition-colors flex items-center gap-1"
                     >
-                      <MessageSquare size={16} /> Agent steps [
-                      <span className="text-accent text-xs">
-                        {isExpanded ? (
-                          <span>
-                            <ChevronUp
-                              size={16}
-                              className="inline-block mr-1"
-                            />
-                            Hide
-                          </span>
-                        ) : (
-                          <span>
-                            {" "}
-                            <ChevronDown
-                              size={16}
-                              className="inline-block mr-1"
-                            />{" "}
-                            Show more
-                          </span>
-                        )}
-                      </span>{" "}
-                      ]
+                      <StopCircle size={14} />
+                      取消
                     </button>
-                  </div>
-
-                  <div className="text-sm text-secondary">
-                    {calculateThreadTokens(visibleMessages)} tokens |{" "}
-                    {visibleMessages.length} messages
-                  </div>
+                  )}
                 </div>
 
-                {isExpanded && (
-                  <div className="flex relative flex-row gap-4">
-                    {!isFlowVisible && (
-                      <div className="z-50 absolute right-2 top-2 bg-tertiary rounded p-2 hover:opacity-100 opacity-80">
-                        <Tooltip title="Show message flow graph">
-                          <button
-                            onClick={() => setIsFlowVisible(true)}
-                            className=" p-1 rounded-md bg-tertiary  hover:bg-secondary  transition-colors"
-                          >
-                            <PanelRightOpen strokeWidth={1.5} size={22} />
-                          </button>
-                        </Tooltip>
-                      </div>
-                    )}
-                    {/* Messages Thread */}
-                    <div
-                      ref={threadContainerRef}
-                      className="flex-1 mt-2 overflow-y-auto max-h-[400px] scroll-smooth scroll pb-2 relative"
-                    >
-                      <div id="scroll-gradient" className="scroll-gradient h-8">
-                        {" "}
-                        <span className="  inline-block h-6"></span>{" "}
-                      </div>
-                      {visibleMessages.map((msg, idx) => (
-                        <div
-                          key={"message_id" + idx + run.id}
-                          className="  mr-2"
-                        >
-                          <RenderMessage
-                            message={msg.config}
-                            isLast={idx === visibleMessages.length - 1}
-                          />
-                        </div>
-                      ))}
-                      {streamingContent &&
-                        streamingContent.runId === run.id && (
-                          <div className="mr-2 mb-10">
-                            <StreamingMessage
-                              content={streamingContent.content}
-                              source={streamingContent.source}
-                            />
-                          </div>
-                        )}
-
-                      {/* Input Request UI */}
-                      {run.status === "awaiting_input" && onInputResponse && (
-                        <div className="mt-4 mr-2">
-                          <InputRequestView
-                            prompt="Type your response..."
-                            onSubmit={onInputResponse}
-                          />
-                        </div>
-                      )}
-                      <div className="text-primary mt-2">
-                        <div className="w-4 h-4 inline-block  border-secondary rounded-bl-lg border-l-2 border-b-2"></div>{" "}
-                        <div className="inline-block ">
-                          {getStatusIcon(run.status)}
-                        </div>
-                      </div>
+                {/* Final Response */}
+                {run.status !== "awaiting_input" && run.status !== "active" && (
+                  <div className="text-sm break-all">
+                    <div className="text-xs bg-tertiary mb-4 text-secondary border-secondary mt-2 bdorder rounded p-2">
+                      终止原因: {run.team_result?.task_result?.stop_reason}
                     </div>
 
-                    {/* Agent Flow Visualization */}
-                    {isFlowVisible && (
-                      <div className="bg-tertiary flex-1 rounded mt-2 relative">
-                        <div className="z-10 absolute left-2 top-2 p-2 hover:opacity-100 opacity-80">
-                          <Tooltip title="Hide message flow">
+                    {lastMessage ? (
+                      <RenderMessage
+                        message={lastMessage.config}
+                        isLast={true}
+                      />
+                    ) : (
+                      <>
+                        {lastResultMessage && (
+                          <RenderMessage message={lastResultMessage} />
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Thread Section */}
+              {visibleMessages.length > 0 && (
+                <div className="mt-4 border-secondary rounded-b">
+                  <div className="flex">
+                    <div className="flex-1">
+                      <button
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className="flex items-center text-sm font-semibold items-center gap-1 hover:text-primary transition-colors"
+                      >
+                        任务执行过程
+                        <div className="ml-4 text-xs text-secondary">
+                          消耗
+                          {calculateThreadTokens(visibleMessages)} tokens
+                        </div>
+                        {/* <span className="text-accent text-xs">
+                          {isExpanded ? <span>隐藏</span> : <span>显示</span>}
+                        </span> */}
+                      </button>
+                    </div>
+                  </div>
+
+                  {isExpanded && (
+                    <div className="flex relative flex-row gap-4">
+                      {!isFlowVisible && (
+                        <div className="z-50 absolute right-0 top-2 rounded p-2 hover:opacity-100 opacity-80">
+                          <Tooltip title="Show message flow graph">
                             <button
-                              onClick={() => setIsFlowVisible(false)}
-                              className=" p-1 rounded-md bg-tertiary hover:bg-secondary transition-colors"
+                              onClick={() => setIsFlowVisible(true)}
+                              className=" p-1 rounded-md hover:bg-secondary  transition-colors"
                             >
-                              <PanelRightClose strokeWidth={1.5} size={22} />
+                              <PanelRightOpen strokeWidth={1.5} size={22} />
                             </button>
                           </Tooltip>
                         </div>
-                        {teamConfig && (
-                          <AgentFlow
-                            teamConfig={teamConfig}
-                            run={{
-                              ...run,
-                              messages: getAgentMessages(visibleMessages),
-                            }}
-                          />
+                      )}
+                      {/* Messages Thread */}
+                      <div
+                        ref={threadContainerRef}
+                        className="flex-1 scroll-smooth scroll pb-2 relative"
+                      >
+                        <div
+                          id="scroll-gradient"
+                          className="scroll-gradient h-8"
+                        >
+                          <span className="inline-block h-6"></span>{" "}
+                        </div>
+                        {visibleMessages.map((msg, idx) => (
+                          <div
+                            key={"message_id" + idx + run.id}
+                            className="mr-2"
+                          >
+                            {msg.config.source != "user" && (
+                              <RenderMessage
+                                message={msg.config}
+                                isLast={idx === visibleMessages.length - 1}
+                              />
+                            )}
+                          </div>
+                        ))}
+                        {streamingContent &&
+                          streamingContent.runId === run.id && (
+                            <div className="mr-2 mb-10">
+                              <StreamingMessage
+                                content={streamingContent.content}
+                                source={streamingContent.source}
+                              />
+                            </div>
+                          )}
+
+                        {/* Input Request UI */}
+                        {run.status === "awaiting_input" && onInputResponse && (
+                          <div className="mt-4 mr-2">
+                            <InputRequestView
+                              prompt="Type your response..."
+                              onSubmit={onInputResponse}
+                            />
+                          </div>
                         )}
+                        <div className="text-primary mt-2 ml-4">
+                          <div className="w-4 h-4 inline-block  border-secondary rounded-bl-lg border-l-[1px] border-b-[1px]"></div>{" "}
+                          <div className="inline-block ">
+                            {getStatusIcon(run.status)}
+                          </div>
+                        </div>
                       </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+
+                      {/* Agent Flow Visualization */}
+                      {isFlowVisible && (
+                        <div className="bg-tertiary flex-1 rounded mt-2 relative">
+                          <div className="z-10 absolute left-2 top-2 p-2 hover:opacity-100 opacity-80">
+                            <Tooltip title="Hide message flow">
+                              <button
+                                onClick={() => setIsFlowVisible(false)}
+                                className=" p-1 rounded-md bg-tertiary hover:bg-secondary transition-colors"
+                              >
+                                <PanelRightClose strokeWidth={1.5} size={22} />
+                              </button>
+                            </Tooltip>
+                          </div>
+                          {teamConfig && (
+                            <AgentFlow
+                              teamConfig={teamConfig}
+                              run={{
+                                ...run,
+                                messages: getAgentMessages(visibleMessages),
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

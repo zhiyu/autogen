@@ -293,24 +293,24 @@ export const EnvironmentVariablesPanel: React.FC<
   // Define columns
   const columns: ColumnTypes[] = [
     {
-      title: "Name",
+      title: "名称",
       dataIndex: "name",
-      width: "55%",
+      width: "20%",
       editable: true,
       inputType: "text",
     },
     {
-      title: "Value",
+      title: "值",
       dataIndex: "value",
-      width: "45%",
       editable: true,
       inputType: "password",
     },
     {
-      title: "Actions",
+      title: "操作",
+      width: "80px",
       dataIndex: "operation",
       render: (_, record) => (
-        <Tooltip title="Delete variable">
+        <Tooltip title="删除变量">
           <Button
             type="text"
             danger
@@ -350,10 +350,10 @@ export const EnvironmentVariablesPanel: React.FC<
   };
 
   return (
-    <Card className="shadow-sm">
+    <div>
       {contextHolder}
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-medium">Environment Variables</h3>
+        <h3 className="text-lg font-medium">环境变量</h3>
         <div className="space-x-2 inline-flex">
           <Tooltip title="Add new variable">
             <Button
@@ -361,7 +361,7 @@ export const EnvironmentVariablesPanel: React.FC<
               icon={<Plus className="w-4 h-4" />}
               onClick={handleAdd}
             >
-              Add
+              添加
             </Button>
           </Tooltip>
           <Tooltip title={isDirty ? "Save your changes" : "No unsaved changes"}>
@@ -378,7 +378,7 @@ export const EnvironmentVariablesPanel: React.FC<
               onClick={handleSave}
               disabled={!isDirty}
             >
-              Save
+              保存
             </Button>
           </Tooltip>
         </div>
@@ -394,16 +394,15 @@ export const EnvironmentVariablesPanel: React.FC<
         loading={loading}
       />
 
-      <div className="mt-6 pt-4 border-t border-secondary">
+      <div className="mt-4">
         <p className="text-xs text-secondary">
           <TriangleAlert
             strokeWidth={1.5}
             className="inline-block mr-1 h-4 w-4"
           />{" "}
-          Note: Environment variables are currently available to all processes
-          on the server.
+          注意：环境变量目前可被所有进程访问
         </p>
       </div>
-    </Card>
+    </div>
   );
 };

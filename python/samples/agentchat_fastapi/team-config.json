@@ -1,0 +1,238 @@
+{
+  "provider": "autogen_agentchat.teams.SelectorGroupChat",
+  "component_type": "team",
+  "version": 1,
+  "component_version": 1,
+  "description": "A team with 2 agents - an AssistantAgent (with a calculator tool) and a CriticAgent in a SelectorGroupChat team.",
+  "label": "Selector Team_17415",
+  "config": {
+    "participants": [
+      {
+        "provider": "autogen_agentchat.agents.AssistantAgent",
+        "component_type": "agent",
+        "version": 1,
+        "component_version": 1,
+        "description": "An agent for planning tasks, this agent should be the first to engage when given a new task.",
+        "label": "PlanningAgent",
+        "config": {
+          "name": "planning_agent",
+          "model_client": {
+            "provider": "autogen_ext.models.openai.OpenAIChatCompletionClient",
+            "component_type": "model",
+            "version": 1,
+            "component_version": 1,
+            "description": "OpenAI",
+            "label": "YXT",
+            "config": {
+              "model": "qwen-plus",
+              "base_url": "https://ymcas-llm.yxt.com/ymcas-ai/multi-model/v1",
+              "api_key": "RD-consultant-ac507e41-1230-426f-b3a6-c78c7ee4e6e0",
+              "model_info": {
+                "vision": "False",
+                "function_calling": "true",
+                "json_output": "False",
+                "family": "unknown"
+              }
+            }
+          },
+          "tools": [],
+          "handoffs": [],
+          "model_context": {
+            "provider": "autogen_core.model_context.UnboundedChatCompletionContext",
+            "component_type": "chat_completion_context",
+            "version": 1,
+            "component_version": 1,
+            "description": "An unbounded chat completion context that keeps a view of the all the messages.",
+            "label": "UnboundedChatCompletionContext",
+            "config": {}
+          },
+          "description": "An agent that provides assistance with ability to use tools.",
+          "system_message": "You are a planning agent.\n        Your job is to break down complex tasks into smaller, manageable subtasks.\n        Your team members are:\n            WebSearchAgent: Searches for information\n            DataAnalystAgent: Performs calculations\n\n        You only plan and delegate tasks - you do not execute them yourself.\n\n        When assigning tasks, use this format:\n        1. <agent> : <task>\n\n        After all tasks are complete, summarize the findings and end with \"TERMINATE\".",
+          "model_client_stream": false,
+          "reflect_on_tool_use": false,
+          "tool_call_summary_format": "{result}"
+        }
+      },
+      {
+        "provider": "autogen_agentchat.agents.AssistantAgent",
+        "component_type": "agent",
+        "version": 1,
+        "component_version": 1,
+        "description": "An agent that provides assistance with tool use.",
+        "label": "WebSearchAgent",
+        "config": {
+          "name": "web_search_agent",
+          "model_client": {
+            "provider": "autogen_ext.models.openai.OpenAIChatCompletionClient",
+            "component_type": "model",
+            "version": 1,
+            "component_version": 1,
+            "description": "OpenAI",
+            "label": "YXT",
+            "config": {
+              "model": "qwen-plus",
+              "base_url": "https://ymcas-llm.yxt.com/ymcas-ai/multi-model/v1",
+              "api_key": "RD-consultant-ac507e41-1230-426f-b3a6-c78c7ee4e6e0",
+              "model_info": {
+                "vision": "False",
+                "function_calling": "true",
+                "json_output": "False",
+                "family": "unknown"
+              }
+            }
+          },
+          "tools": [
+            {
+              "provider": "autogen_core.tools.FunctionTool",
+              "component_type": "tool",
+              "version": 1,
+              "component_version": 1,
+              "description": "",
+              "label": "",
+              "config": {
+                "source_code": "def search_web_tool(query: str) -> str:\n        if \"2006-2007\" in query:\n            return \"\"\"Here are the total points scored by Miami Heat players in the 2006-2007 season:\n            Udonis Haslem: 844 points\n            Dwayne Wade: 1397 points\n            James Posey: 550 points\n            ...\n            \"\"\"\n        elif \"2007-2008\" in query:\n            return \"The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.\"\n        elif \"2008-2009\" in query:\n            return \"The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.\"\n        return \"No data found.\"",
+                "name": "search_web_tool",
+                "description": "Description of the new function",
+                "global_imports": [],
+                "has_cancellation_support": false
+              }
+            }
+          ],
+          "handoffs": [],
+          "model_context": {
+            "provider": "autogen_core.model_context.UnboundedChatCompletionContext",
+            "component_type": "chat_completion_context",
+            "version": 1,
+            "component_version": 1,
+            "description": "An unbounded chat completion context that keeps a view of the all the messages.",
+            "label": "UnboundedChatCompletionContext",
+            "config": {}
+          },
+          "description": "an agent that critiques and improves the assistant's output",
+          "system_message": "You are a web search agent.\n        Your only tool is search_tool - use it to find information.\n        You make only one search call at a time.\n        Once you have the results, you never do calculations based on them.",
+          "model_client_stream": false,
+          "reflect_on_tool_use": false,
+          "tool_call_summary_format": "{result}"
+        }
+      },
+      {
+        "provider": "autogen_agentchat.agents.AssistantAgent",
+        "component_type": "agent",
+        "version": 1,
+        "component_version": 1,
+        "description": "An agent for performing calculations.",
+        "label": "DataAnalystAgent",
+        "config": {
+          "name": "assistant_agent",
+          "model_client": {
+            "provider": "autogen_ext.models.openai.OpenAIChatCompletionClient",
+            "component_type": "model",
+            "version": 1,
+            "component_version": 1,
+            "description": "OpenAI",
+            "label": "YXT",
+            "config": {
+              "model": "qwen-plus",
+              "base_url": "https://ymcas-llm.yxt.com/ymcas-ai/multi-model/v1",
+              "api_key": "RD-consultant-ac507e41-1230-426f-b3a6-c78c7ee4e6e0",
+              "model_info": {
+                "vision": "False",
+                "function_calling": "true",
+                "json_output": "False",
+                "family": "unknown"
+              }
+            }
+          },
+          "tools": [
+            {
+              "provider": "autogen_core.tools.FunctionTool",
+              "component_type": "tool",
+              "version": 1,
+              "component_version": 1,
+              "description": "",
+              "label": "FunctionTool",
+              "config": {
+                "source_code": "def percentage_change_tool(start: float, end: float) -> float:\n        return ((end - start) / start) * 100",
+                "name": "percentage_change_tool",
+                "description": "A simple calculator that performs basic arithmetic operations",
+                "global_imports": [],
+                "has_cancellation_support": false
+              }
+            }
+          ],
+          "handoffs": [],
+          "model_context": {
+            "provider": "autogen_core.model_context.UnboundedChatCompletionContext",
+            "component_type": "chat_completion_context",
+            "version": 1,
+            "component_version": 1,
+            "description": "An unbounded chat completion context that keeps a view of the all the messages.",
+            "label": "UnboundedChatCompletionContext",
+            "config": {}
+          },
+          "description": "An agent that provides assistance with ability to use tools.",
+          "system_message": "You are a data analyst.\n        Given the tasks you have been assigned, you should analyze the data and provide results using the tools provided.\n        If you have not seen the data, ask for it.",
+          "model_client_stream": false,
+          "reflect_on_tool_use": false,
+          "tool_call_summary_format": "{result}"
+        }
+      }
+    ],
+    "model_client": {
+      "provider": "autogen_ext.models.openai.OpenAIChatCompletionClient",
+      "component_type": "model",
+      "version": 1,
+      "component_version": 1,
+      "description": "OpenAI",
+      "label": "YXT",
+      "config": {
+        "model": "qwen-plus",
+        "base_url": "https://ymcas-llm.yxt.com/ymcas-ai/multi-model/v1",
+        "api_key": "RD-consultant-ac507e41-1230-426f-b3a6-c78c7ee4e6e0",
+        "model_info": {
+          "vision": "False",
+          "function_calling": "true",
+          "json_output": "False",
+          "family": "unknown"
+        }
+      }
+    },
+    "termination_condition": {
+      "provider": "autogen_agentchat.base.OrTerminationCondition",
+      "component_type": "termination",
+      "version": 1,
+      "component_version": 1,
+      "label": "OrTerminationCondition",
+      "config": {
+        "conditions": [
+          {
+            "provider": "autogen_agentchat.conditions.TextMentionTermination",
+            "component_type": "termination",
+            "version": 1,
+            "component_version": 1,
+            "description": "Terminate the conversation if a specific text is mentioned.",
+            "label": "TextMentionTermination",
+            "config": {
+              "text": "TERMINATE"
+            }
+          },
+          {
+            "provider": "autogen_agentchat.conditions.MaxMessageTermination",
+            "component_type": "termination",
+            "version": 1,
+            "component_version": 1,
+            "description": "Terminate the conversation after a maximum number of messages have been exchanged.",
+            "label": "MaxMessageTermination",
+            "config": {
+              "max_messages": 10,
+              "include_agent_event": false
+            }
+          }
+        ]
+      }
+    },
+    "selector_prompt": "You are in a role play game. The following roles are available:\n{roles}.\nRead the following conversation. Then select the next role from {participants} to play. Only return the role.\n\n{history}\n\nRead the above conversation. Then select the next role from {participants} to play. Only return the role.\n",
+    "allow_repeated_speaker": false,
+    "max_selector_attempts": 3
+  }
+}

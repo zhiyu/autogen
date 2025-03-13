@@ -23,7 +23,7 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
     return (
       <div className="h-full border-r border-secondary">
         <div className="p-2 -ml-2">
-          <Tooltip title={`Settings (${sections.length})`}>
+          <Tooltip title={`设置 (${sections.length})`}>
             <button
               onClick={onToggle}
               className="p-2 rounded-md hover:bg-secondary hover:text-accent text-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50"
@@ -41,7 +41,7 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between pt-0 p-4 pl-2 pr-2 border-b border-secondary">
         <div className="flex items-center gap-2">
-          <span className="text-primary font-medium">Settings</span>
+          <span className="text-primary font-medium">设置</span>
           <span className="px-2 py-0.5 text-xs bg-accent/10 text-accent rounded">
             {sections.length}
           </span>
@@ -60,7 +60,7 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
         {sections.map((section) => (
           <div key={section.id} className="relative">
             <div
-              className={`absolute top-1 left-0.5 z-50 h-[calc(100%-8px)] w-1 bg-opacity-80 rounded 
+              className={`absolute top-1 left-[4px] z-50 h-[calc(100%-8px)] w-[2px] bg-opacity-80 rounded 
                 ${
                   currentSection.id === section.id ? "bg-accent" : "bg-tertiary"
                 }`}

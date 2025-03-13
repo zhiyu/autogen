@@ -8,7 +8,7 @@
   --color-text-secondary: #e2e8f0;
   --color-text-accent: #464feb;
   --color-border-primary: #f7fafc;
-  --color-border-secondary: #e2e8f045;
+  --color-border-secondary: #52525445;
   --color-border-accent: #464feb;
 }
 
@@ -43,8 +43,8 @@ html {
 }
 
 body {
-  padding: 0px 64px 0px 64px;
-  @apply px-4 md:px-4 lg:px-8 w-full !important;
+  padding: 0px 0px 0px 0px;
+  @apply pr-4 md:pr-4 lg:pr-4 w-full !important;
   margin: 0px auto;
   min-width: 300px;
   /* max-width: 1900px; */
@@ -380,4 +380,14 @@ div#___gatsby,
 div#gatsby-focus-wrapper {
   height: 100%;
   /* border: 1px solid green; */
+}
+
+/* hide reactflow*/
+.react-flow__attribution {
+  display: none;
+}
+
+.ant-drawer-content-wrapper {
+  height: 100% !important;
+  overflow-y: auto;
 }

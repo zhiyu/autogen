@@ -250,7 +250,7 @@ export const GalleryManager: React.FC = () => {
         <div className="p-4 pt-2">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 mb-4 text-sm">
-            <span className="text-primary font-medium">Galleries</span>
+            <span className="text-primary font-medium">模板库</span>
             {currentGallery && (
               <>
                 <ChevronRight className="w-4 h-4 text-secondary" />

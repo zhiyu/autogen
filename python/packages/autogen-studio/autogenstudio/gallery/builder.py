@@ -133,11 +133,11 @@ def create_default_gallery() -> GalleryConfig:
     """Create a default gallery with all components including calculator and web surfer teams."""
 
     # url = "https://raw.githubusercontent.com/microsoft/autogen/refs/heads/main/python/packages/autogen-studio/autogenstudio/gallery/default.json"
-    builder = GalleryBuilder(id="gallery_default", name="Default Component Gallery")
+    builder = GalleryBuilder(id="gallery_default", name="默认模板库")
 
     # Set metadata
     builder.set_metadata(
-        description="A default gallery containing basic components for human-in-loop conversations",
+        description="默认模板库，包含用于人机交互对话的基本组件。",
         tags=["human-in-loop", "assistant", "web agents"],
         category="conversation",
     )

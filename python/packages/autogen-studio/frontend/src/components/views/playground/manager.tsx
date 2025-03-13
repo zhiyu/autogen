@@ -258,7 +258,11 @@ export const SessionManager: React.FC = () => {
       >
         {session && sessions.length > 0 ? (
           <div className="pl-4">
-            {session && <ChatView session={session} />}
+            {session && (
+              <div className="h-[calc(100vh-35px)]">
+                <ChatView session={session} />
+              </div>
+            )}
           </div>
         ) : (
           <div className="flex items-center justify-center h-full text-secondary">

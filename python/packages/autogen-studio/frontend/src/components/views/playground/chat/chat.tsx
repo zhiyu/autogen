@@ -504,10 +504,10 @@ export default function ChatView({ session }: ChatViewProps) {
   };
 
   return (
-    <div className="text-primary h-[calc(100vh-165px)] bg-primary relative rounded flex-1 scroll">
+    <div className="text-primary h-full bg-primary relative rounded flex-1 scroll">
       {contextHolder}
       <div className="flex pt-2 items-center gap-2  text-sm">
-        <span className="text-primary font-medium"> Sessions</span>
+        <span className="text-primary font-medium"> 会话</span>
         {session && (
           <>
             <ChevronRight className="w-4 h-4 text-secondary" />
@@ -558,9 +558,9 @@ export default function ChatView({ session }: ChatViewProps) {
                         strokeWidth={1}
                         className="w-64 h-64 mb-4 inline-block"
                       />
-                      <div className="  font-medium mb-2">Start a new task</div>
+                      <div className="  font-medium mb-2">开启新的会话</div>
                       <div className="text-secondary text-sm">
-                        Enter a task to get started
+                        输入您的问题并点击发送以开始对话
                       </div>
                     </div>
                   </div>

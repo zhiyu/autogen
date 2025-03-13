@@ -339,123 +339,120 @@ export const TeamBuilder: React.FC<TeamBuilderProps> = ({
     }
   };
   return (
-    <div>
+    <div className="absolute top-0 bottom-0 right-0 left-0 flex flex-col">
       {contextHolder}
 
-      <div className="flex gap-2 text-xs rounded border-dashed border p-2 mb-2 items-center">
-        <div className="flex-1">
-          <Switch
-            onChange={() => {
-              setIsJsonMode(!isJsonMode);
+      <div className="flex items-center gap-2 text-xs px-4 pb-3 pt-1 justify-end">
+        {validationResults && !validationResults.is_valid && (
+          <div className="inline-block mr-2">
+            <ValidationErrors validation={validationResults} />
+          </div>
+        )}
+        <Switch
+          onChange={() => {
+            setIsJsonMode(!isJsonMode);
+          }}
+          // size="small"
+          defaultChecked={isJsonMode}
+          checked={isJsonMode}
+          checkedChildren=<div className="flex items-center text-xs h-6 leading-2">
+            JSON
+          </div>
+          unCheckedChildren=<div className="flex items-center text-xs h-5 leading-2">
+            JSON
+          </div>
+        />
+        <Tooltip title="导出">
+          <Button
+            type="text"
+            icon={
+              <div className="relative">
+                <Download size={18} />
+              </div>
+            }
+            className="p-1.5 hover:bg-primary/10 rounded-md text-primary/75 hover:text-primary"
+            onClick={() => {
+              const json = JSON.stringify(syncToJson(), null, 2);
+              const blob = new Blob([json], { type: "application/json" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "team-config.json";
+              a.click();
+              URL.revokeObjectURL(url);
             }}
-            className="mr-2"
-            // size="small"
-            defaultChecked={!isJsonMode}
-            checkedChildren=<div className=" text-xs">
-              <Cable className="w-3 h-3 inline-block mt-1 mr-1" />
-            </div>
-            unCheckedChildren=<div className=" text-xs">
-              <Code2 className="w-3 h-3 mt-1 inline-block mr-1" />
-            </div>
           />
-          {isJsonMode ? "View JSON" : <>Visual Builder</>}{" "}
-        </div>
+        </Tooltip>
 
-        <div>
-          {validationResults && !validationResults.is_valid && (
-            <div className="inline-block mr-2">
-              {" "}
-              <ValidationErrors validation={validationResults} />
-            </div>
-          )}
-          <Tooltip title="Download Team">
-            <Button
-              type="text"
-              icon={<Download size={18} />}
-              className="p-1.5 hover:bg-primary/10 rounded-md text-primary/75 hover:text-primary"
-              onClick={() => {
-                const json = JSON.stringify(syncToJson(), null, 2);
-                const blob = new Blob([json], { type: "application/json" });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "team-config.json";
-                a.click();
-                URL.revokeObjectURL(url);
-              }}
-            />
-          </Tooltip>
+        <Tooltip title="保存">
+          <Button
+            type="text"
+            icon={
+              <div className="relative">
+                <Save size={18} />
+                {isDirty && (
+                  <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
+                )}
+              </div>
+            }
+            className="p-1.5 hover:bg-primary/10 rounded-md text-primary/75 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleSave}
+            // disabled={!isDirty}
+          />
+        </Tooltip>
 
-          <Tooltip title="Save Changes">
-            <Button
-              type="text"
-              icon={
-                <div className="relative">
-                  <Save size={18} />
-                  {isDirty && (
-                    <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
-                  )}
-                </div>
-              }
-              className="p-1.5 hover:bg-primary/10 rounded-md text-primary/75 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={handleSave}
-              // disabled={!isDirty}
-            />
-          </Tooltip>
+        <Tooltip
+          title=<div>
+            校验
+            {validationResults && (
+              <div className="text-xs text-center my-1">
+                {teamValidated ? (
+                  <span>
+                    <CheckCircle className="w-3 h-3 text-green-500 inline-block mr-1" />
+                    success
+                  </span>
+                ) : (
+                  <div className="">
+                    <CircleX className="w-3 h-3 text-red-500 inline-block mr-1" />
+                    errors
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        >
+          <Button
+            type="text"
+            loading={validationLoading}
+            icon={
+              <div className="relative">
+                <ListCheck size={18} />
+                {validationResults && (
+                  <div
+                    className={` ${
+                      teamValidated ? "bg-green-500" : "bg-red-500"
+                    } absolute top-0 right-0 w-2 h-2  rounded-full`}
+                  ></div>
+                )}
+              </div>
+            }
+            className="p-1.5 hover:bg-primary/10 rounded-md text-primary/75 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleValidate}
+          />
+        </Tooltip>
 
-          <Tooltip
-            title=<div>
-              Validate Team
-              {validationResults && (
-                <div className="text-xs text-center my-1">
-                  {teamValidated ? (
-                    <span>
-                      <CheckCircle className="w-3 h-3 text-green-500 inline-block mr-1" />
-                      success
-                    </span>
-                  ) : (
-                    <div className="">
-                      <CircleX className="w-3 h-3 text-red-500 inline-block mr-1" />
-                      errors
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+        <Tooltip title="运行">
+          <Button
+            type="primary"
+            icon={<PlayCircle size={18} />}
+            className="p-1.5 ml-2 px-2.5 hover:bg-primary/10 rounded-md text-primary/75 hover:text-primary"
+            onClick={() => {
+              setTestDrawerVisible(true);
+            }}
           >
-            <Button
-              type="text"
-              loading={validationLoading}
-              icon={
-                <div className="relative">
-                  <ListCheck size={18} />
-                  {validationResults && (
-                    <div
-                      className={` ${
-                        teamValidated ? "bg-green-500" : "bg-red-500"
-                      } absolute top-0 right-0 w-2 h-2  rounded-full`}
-                    ></div>
-                  )}
-                </div>
-              }
-              className="p-1.5 hover:bg-primary/10 rounded-md text-primary/75 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={handleValidate}
-            />
-          </Tooltip>
-
-          <Tooltip title="Run Team">
-            <Button
-              type="primary"
-              icon={<PlayCircle size={18} />}
-              className="p-1.5 ml-2 px-2.5 hover:bg-primary/10 rounded-md text-primary/75 hover:text-primary"
-              onClick={() => {
-                setTestDrawerVisible(true);
-              }}
-            >
-              Run
-            </Button>
-          </Tooltip>
-        </div>
+            运行
+          </Button>
+        </Tooltip>
       </div>
       <DndContext
         sensors={sensors}
@@ -463,71 +460,72 @@ export const TeamBuilder: React.FC<TeamBuilderProps> = ({
         onDragOver={handleDragOver}
         onDragStart={handleDragStart}
       >
-        <Layout className=" relative bg-primary  h-[calc(100vh-239px)] rounded">
+        <Layout className=" relative bg-primary  ">
           {!isJsonMode && <ComponentLibrary />}
 
-          <Layout className="bg-primary rounded">
-            <Content className="relative rounded bg-tertiary  ">
-              <div
-                className={`w-full h-full transition-all duration-200 ${
-                  isFullscreen
-                    ? "fixed inset-4 z-50 shadow bg-tertiary  backdrop-blur-sm"
-                    : ""
-                }`}
-              >
-                {isJsonMode ? (
-                  <MonacoEditor
-                    value={JSON.stringify(syncToJson(), null, 2)}
-                    onChange={handleJsonChange}
-                    editorRef={editorRef}
-                    language="json"
-                    minimap={false}
-                  />
-                ) : (
-                  <ReactFlow
-                    nodes={nodes}
-                    edges={edges}
-                    onNodesChange={onNodesChange}
-                    onEdgesChange={onEdgesChange}
-                    onConnect={onConnect}
-                    // onNodeClick={(_, node) => setSelectedNode(node.id)}
-                    nodeTypes={nodeTypes}
-                    edgeTypes={edgeTypes}
-                    onDrop={(event) => event.preventDefault()}
-                    onDragOver={(event) => event.preventDefault()}
-                    className="rounded"
-                    fitView
-                    fitViewOptions={{ padding: 10 }}
-                  >
-                    {showGrid && <Background />}
-                    {showMiniMap && <MiniMap />}
-                  </ReactFlow>
-                )}
-              </div>
-              {isFullscreen && (
-                <div
-                  className="fixed inset-0 -z-10 bg-background bg-opacity-80 backdrop-blur-sm"
-                  onClick={handleToggleFullscreen}
+          <Content className="relative bg-tertiary  ">
+            <div
+              className={`w-full h-full transition-all duration-200 ${
+                isFullscreen
+                  ? "fixed inset-0 z-50 shadow bg-tertiary  backdrop-blur-sm"
+                  : ""
+              }`}
+            >
+              {isJsonMode ? (
+                <MonacoEditor
+                  value={JSON.stringify(syncToJson(), null, 2)}
+                  onChange={handleJsonChange}
+                  editorRef={editorRef}
+                  language="json"
+                  minimap={false}
                 />
+              ) : (
+                <ReactFlow
+                  nodes={nodes}
+                  edges={edges}
+                  onNodesChange={onNodesChange}
+                  onEdgesChange={onEdgesChange}
+                  onConnect={onConnect}
+                  // onNodeClick={(_, node) => setSelectedNode(node.id)}
+                  nodeTypes={nodeTypes}
+                  edgeTypes={edgeTypes}
+                  onDrop={(event) => event.preventDefault()}
+                  onDragOver={(event) => event.preventDefault()}
+                  className="rounded"
+                  defaultViewport={{
+                    zoom: 0.8,
+                    x: 0,
+                    y: 0,
+                  }}
+                >
+                  {showGrid && <Background />}
+                  {showMiniMap && <MiniMap />}
+                </ReactFlow>
               )}
-              <TeamBuilderToolbar
-                isJsonMode={isJsonMode}
-                isFullscreen={isFullscreen}
-                showGrid={showGrid}
-                onToggleMiniMap={() => setShowMiniMap(!showMiniMap)}
-                canUndo={canUndo}
-                canRedo={canRedo}
-                isDirty={isDirty}
-                onToggleView={() => setIsJsonMode(!isJsonMode)}
-                onUndo={undo}
-                onRedo={redo}
-                onSave={handleSave}
-                onToggleGrid={() => setShowGrid(!showGrid)}
-                onToggleFullscreen={handleToggleFullscreen}
-                onAutoLayout={layoutNodes}
+            </div>
+            {isFullscreen && (
+              <div
+                className="fixed inset-0 -z-10 bg-background bg-opacity-80 backdrop-blur-sm"
+                onClick={handleToggleFullscreen}
               />
-            </Content>
-          </Layout>
+            )}
+            <TeamBuilderToolbar
+              isJsonMode={isJsonMode}
+              isFullscreen={isFullscreen}
+              showGrid={showGrid}
+              onToggleMiniMap={() => setShowMiniMap(!showMiniMap)}
+              canUndo={canUndo}
+              canRedo={canRedo}
+              isDirty={isDirty}
+              onToggleView={() => setIsJsonMode(!isJsonMode)}
+              onUndo={undo}
+              onRedo={redo}
+              onSave={handleSave}
+              onToggleGrid={() => setShowGrid(!showGrid)}
+              onToggleFullscreen={handleToggleFullscreen}
+              onAutoLayout={layoutNodes}
+            />
+          </Content>
 
           {selectedNodeId && (
             <Drawer

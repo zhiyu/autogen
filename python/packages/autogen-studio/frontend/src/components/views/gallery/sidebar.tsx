@@ -40,7 +40,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
   if (!isOpen) {
     return (
       <div className="h-full border-r border-secondary">
-        <div className="p-2 -ml-2">
+        <div className="p-2 pt-0 -ml-2">
           <Tooltip title={`Galleries (${galleries.length})`}>
             <button
               onClick={onToggle}
@@ -67,11 +67,11 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
 
   // Render expanded state
   return (
-    <div className="h-full border-r border-secondary">
+    <div className="h-full border-r border-secondary px-2">
       {/* Header */}
-      <div className="flex items-center justify-between pt-0 p-4 pl-2 pr-2 border-b border-secondary">
+      <div className="flex items-center justify-between pt-0 py-4">
         <div className="flex items-center gap-2">
-          <span className="text-primary font-medium">Galleries</span>
+          <span className="text-primary font-medium">模板库</span>
           <span className="px-2 py-0.5 text-xs bg-accent/10 text-accent rounded">
             {galleries.length}
           </span>
@@ -87,8 +87,8 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
       </div>
 
       {/* Create Gallery Button */}
-      <div className="my-4 flex text-sm">
-        <div className="mr-2 w-full">
+      <div className="py-4  flex text-sm mr-2 border-t border-secondary">
+        <div className="w-full">
           <Tooltip title="Create new gallery">
             <Button
               type="primary"
@@ -96,7 +96,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
               icon={<Plus className="w-4 h-4" />}
               onClick={onCreateGallery}
             >
-              New Gallery
+              新建模板库
             </Button>
           </Tooltip>
         </div>
@@ -104,7 +104,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
 
       {/* Section Label */}
       <div className="py-2 flex text-sm text-secondary">
-        <div className="flex">All Galleries</div>
+        <div className="flex">所有模板库</div>
         {isLoading && <RefreshCw className="w-4 h-4 ml-2 animate-spin" />}
       </div>
 
@@ -116,17 +116,17 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
         </div>
       )}
 
-      <div className="scroll overflow-y-auto h-[calc(100%-170px)]">
+      <div className="scroll overflow-y-auto h-[calc(100%-170px)] mr-2">
         {galleries.map((gallery) => (
           <div key={gallery.id} className="relative border-secondary">
             <div
-              className={`absolute top-1 left-0.5 z-50 h-[calc(100%-8px)] w-1 bg-opacity-80 rounded ${
+              className={`absolute top-1 left-[4px] z-50 h-[calc(100%-8px)] w-[2px] bg-opacity-80 rounded ${
                 currentGallery?.id === gallery.id ? "bg-accent" : "bg-tertiary"
               }`}
             />
             {gallery && gallery.config && gallery.config.components && (
               <div
-                className={`group ml-1 flex flex-col p-3 rounded-l cursor-pointer hover:bg-secondary ${
+                className={`group ml-1 flex flex-col p-3 rounded cursor-pointer hover:bg-secondary ${
                   currentGallery?.id === gallery.id
                     ? "border-accent bg-secondary"
                     : "border-transparent"
