@@ -88,3 +88,6 @@ fmt = "ruff format"
 format.ref = "fmt"
 lint = "ruff check"
 test = "pytest -n 0 --cov=autogenstudio --cov-report=term-missing"
+
+[tool.uv]
+index-url = "https://pypi.tuna.tsinghua.edu.cn/simple"

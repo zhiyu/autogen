@@ -133,7 +133,7 @@ const Sidebar = ({ link, meta, isMobile }: SidebarProps) => {
         <Link
           to="/"
           onClick={() => setNavigationHeader("/")}
-          className="w-8 text-right text-accent hover:opacity-80 transition-opacity"
+          className="w-8 text-right text-accent hover:opacity-80 transition-opacity mt-1"
         >
           <Icon icon="app" size={8} />
         </Link>
