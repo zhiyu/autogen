@@ -180,13 +180,19 @@ export const RenderMessage: React.FC<MessageProps> = ({
             className={`text-sm text-secondary ${isUser ? "text-right" : ""}`}
           >
             {messageUtils.isToolCallContent(content) ? (
-              <div className="ml-10">正在执行工具调用...</div>
+              <div className="ml-4 pl-5 border-secondary border-l-[1px]">
+                正在执行工具调用...
+              </div>
             ) : messageUtils.isMultiModalContent(content) ? (
               <RenderMultiModal content={content} />
             ) : messageUtils.isFunctionExecutionResult(content) ? (
-              <div className="ml-10">工具调用已完成！</div>
+              <div className="ml-4 pl-5 border-secondary border-l-[1px]">
+                工具调用已完成！
+              </div>
             ) : message.source === "llm_call_event" ? (
-              <LLMLogRenderer content={String(content)} />
+              <div className="ml-4 pl-5 border-secondary border-l-[1px]">
+                <LLMLogRenderer content={String(content)} />
+              </div>
             ) : (
               <div className="ml-4">
                 <div
