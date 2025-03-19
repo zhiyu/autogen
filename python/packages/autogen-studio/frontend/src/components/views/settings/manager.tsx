@@ -121,7 +121,7 @@ export const SettingsManager: React.FC = () => {
         }`}
       >
         <div className="p-4 pt-2">
-          <div className="flex items-center gap-2 mb-4 text-sm">
+          <div className="flex items-center gap-2 mb-4">
             <span className="text-primary font-medium">设置</span>
           </div>
 
