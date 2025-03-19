@@ -5,16 +5,15 @@ import {
   Loader2,
   CheckCircle,
   AlertTriangle,
-  TriangleAlertIcon,
-  ChevronDown,
-  ChevronUp,
   Bot,
   PanelRightClose,
-  PanelRightOpen,
+  Workflow,
+  SquareFunction,
 } from "lucide-react";
 import { Run, Message, TeamConfig, Component } from "../../../types/datamodel";
 import AgentFlow from "./agentflow/agentflow";
 import { RenderMessage } from "./rendermessage";
+import ToolCalls from "./toolcalls";
 import InputRequestView from "./inputrequest";
 import { Tooltip } from "antd";
 import { getRelativeTimeString, LoadingDots } from "../../atoms";
@@ -97,14 +96,16 @@ const RunView: React.FC<RunViewProps> = ({
   isFirstRun = false,
   streamingContent,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
   const threadContainerRef = useRef<HTMLDivElement | null>(null);
   const isActive = run.status === "active" || run.status === "awaiting_input";
 
   const { uiSettings } = useSettingsStore();
-  const [isFlowVisible, setIsFlowVisible] = useState(
-    uiSettings.show_agent_flow_by_default ?? true
-  );
+  const [isFlowVisible, setIsFlowVisible] = useState(false);
+  // const [isFlowVisible, setIsFlowVisible] = useState(
+  //   uiSettings.show_agent_flow_by_default ?? true
+  // );
+
+  const [isFunctionCallsVisible, setIsFunctionCallsVisible] = useState(true);
 
   const visibleMessages = useMemo(() => {
     if (uiSettings.show_llm_call_events) {
@@ -193,7 +194,7 @@ const RunView: React.FC<RunViewProps> = ({
   const lastMessage = getLastMeaningfulMessage(visibleMessages);
 
   return (
-    <div className="space-y-6  mr-2 ">
+    <div className="space-y-6 gap-8 mr-2 ">
       {/* Run Header */}
       <div className={`${isFirstRun ? "mb-2" : "mt-4"} mb-4 pb-2 pt-2`}>
         <div className="text-xs text-secondary flex flex-row-reverse text-right">
@@ -279,38 +280,53 @@ const RunView: React.FC<RunViewProps> = ({
               {/* Thread Section */}
               {visibleMessages.length > 0 && (
                 <div className="mt-4 border-secondary rounded-b">
-                  <div className="flex">
-                    <div className="flex-1">
-                      <button
-                        onClick={() => setIsExpanded(!isExpanded)}
-                        className="flex items-center text-sm font-semibold items-center gap-1 hover:text-primary transition-colors"
-                      >
-                        任务执行过程
-                        <div className="ml-4 text-xs text-secondary">
-                          消耗
-                          {calculateThreadTokens(visibleMessages)} tokens
-                        </div>
-                        {/* <span className="text-accent text-xs">
-                          {isExpanded ? <span>隐藏</span> : <span>显示</span>}
-                        </span> */}
-                      </button>
+                  <div className="flex relative">
+                    <div className="flex items-center text-sm font-semibold">
+                      任务执行过程
+                      <div className="ml-4 text-xs text-secondary">
+                        消耗
+                        {calculateThreadTokens(visibleMessages)} tokens
+                      </div>
+                    </div>
+                    <div className="z-50 absolute right-0 top-0 rounded">
+                      <Tooltip title="Show message flow graph" className="mr-2">
+                        <button
+                          onClick={() => {
+                            if (!isFlowVisible) {
+                              setIsFlowVisible(true);
+                              setIsFunctionCallsVisible(false);
+                            } else {
+                              setIsFlowVisible(false);
+                              setIsFunctionCallsVisible(true);
+                            }
+                          }}
+                          className={`p-1 rounded-md  hover:bg-secondary transition-colors ${
+                            isFlowVisible ? "bg-tertiary" : ""
+                          }`}
+                        >
+                          <Workflow strokeWidth={1.5} size={22} />
+                        </button>
+                      </Tooltip>
+                      <Tooltip title="Show function calls">
+                        <button
+                          onClick={() => {
+                            if (isFlowVisible) {
+                              setIsFlowVisible(false);
+                              setIsFunctionCallsVisible(true);
+                            }
+                          }}
+                          className={`p-1 rounded-md  hover:bg-secondary transition-colors ${
+                            isFunctionCallsVisible ? "bg-tertiary" : ""
+                          }`}
+                        >
+                          <SquareFunction strokeWidth={1.5} size={22} />
+                        </button>
+                      </Tooltip>
                     </div>
                   </div>
 
-                  {isExpanded && (
-                    <div className="flex relative flex-row gap-4">
-                      {!isFlowVisible && (
-                        <div className="z-50 absolute right-0 top-2 rounded p-2 hover:opacity-100 opacity-80">
-                          <Tooltip title="Show message flow graph">
-                            <button
-                              onClick={() => setIsFlowVisible(true)}
-                              className=" p-1 rounded-md hover:bg-secondary  transition-colors"
-                            >
-                              <PanelRightOpen strokeWidth={1.5} size={22} />
-                            </button>
-                          </Tooltip>
-                        </div>
-                      )}
+                  <div className="relative grid grid-cols-2 gap-4">
+                    <div className="col-span-1">
                       {/* Messages Thread */}
                       <div
                         ref={threadContainerRef}
@@ -361,33 +377,27 @@ const RunView: React.FC<RunViewProps> = ({
                           </div>
                         </div>
                       </div>
+                    </div>
 
-                      {/* Agent Flow Visualization */}
-                      {isFlowVisible && (
-                        <div className="bg-tertiary flex-1 rounded mt-2 relative">
-                          <div className="z-10 absolute left-2 top-2 p-2 hover:opacity-100 opacity-80">
-                            <Tooltip title="Hide message flow">
-                              <button
-                                onClick={() => setIsFlowVisible(false)}
-                                className=" p-1 rounded-md bg-tertiary hover:bg-secondary transition-colors"
-                              >
-                                <PanelRightClose strokeWidth={1.5} size={22} />
-                              </button>
-                            </Tooltip>
-                          </div>
-                          {teamConfig && (
-                            <AgentFlow
-                              teamConfig={teamConfig}
-                              run={{
-                                ...run,
-                                messages: getAgentMessages(visibleMessages),
-                              }}
-                            />
-                          )}
-                        </div>
+                    {/* Agent Flow and function calls */}
+                    <div className="relative col-span-1">
+                      <div id="scroll-gradient" className="scroll-gradient h-8">
+                        <span className="inline-block h-6"></span>{" "}
+                      </div>
+                      {isFlowVisible && teamConfig && (
+                        <AgentFlow
+                          teamConfig={teamConfig}
+                          run={{
+                            ...run,
+                            messages: getAgentMessages(visibleMessages),
+                          }}
+                        />
+                      )}
+                      {isFunctionCallsVisible && !isFlowVisible && (
+                        <ToolCalls messages={visibleMessages} run_id={run.id} />
                       )}
                     </div>
-                  )}
+                  </div>
                 </div>
               )}
             </div>

@@ -109,6 +109,8 @@ export const TruncatableText = memo(
     } catch (e) {
       console.log(e);
     }
+
+    console.log(typeof _content);
     return (
       <div className="relative">
         {_content && (

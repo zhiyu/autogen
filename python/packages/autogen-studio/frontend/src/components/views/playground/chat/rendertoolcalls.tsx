@@ -131,7 +131,7 @@ interface MessageProps {
   className?: string;
 }
 
-export const RenderMessage: React.FC<MessageProps> = ({
+export const RenderToolCalls: React.FC<MessageProps> = ({
   message,
   isLast = false,
   className = "",
@@ -147,70 +147,51 @@ export const RenderMessage: React.FC<MessageProps> = ({
         isLLMEventMessage ? "border-accent" : ""
       } ${isUser ? "flex flex-row-reverse" : ""}`}
     >
-      <div
-        className={`
+      {(messageUtils.isToolCallContent(content) ||
+        messageUtils.isFunctionExecutionResult(content)) && (
+        <div
+          className={`
         flex items-start gap-2 rounded
         ${isUser ? "flex-row-reverse items-center" : "flex-col "}
         transition-all duration-200
       `}
-      >
-        <div
-          className={`
+        >
+          <div
+            className={`
           flex items-center 
           ${isUser ? "text-accent" : "text-primary"}
         `}
-        >
-          <div className="p-1.5 rounded bg-light ">
-            {isUser ? (
-              <UserRound size={18} />
-            ) : message.source == "llm_call_event" ? (
-              <Bug size={18} />
-            ) : (
-              <Bot size={18} />
-            )}
-          </div>
-
-          <span className="ml-2 text-sm font-semibold text-primary">
-            {!isUser && message.source}
-          </span>
-        </div>
-
-        <div className="flex flex-col w-full">
-          <div
-            className={`text-sm text-secondary ${isUser ? "text-right" : ""}`}
           >
-            {messageUtils.isToolCallContent(content) ? (
-              <div className="ml-10">正在执行工具调用...</div>
-            ) : messageUtils.isMultiModalContent(content) ? (
-              <RenderMultiModal content={content} />
-            ) : messageUtils.isFunctionExecutionResult(content) ? (
-              <div className="ml-10">工具调用已完成！</div>
-            ) : message.source === "llm_call_event" ? (
-              <LLMLogRenderer content={String(content)} />
-            ) : (
-              <div className="ml-4">
-                <div
-                  className={`${
-                    isUser ? "" : "border-secondary border-l-[1px]"
-                  } pl-5`}
-                >
-                  <TruncatableText
-                    content={String(content)}
-                    className="break-all"
-                  />
-                </div>
-              </div>
-            )}
-            {message.models_usage && (
-              <div className="text-xs text-secondary mt-2 ml-4">
-                {(message.models_usage.prompt_tokens || 0) +
-                  (message.models_usage.completion_tokens || 0)}{" "}
-                tokens
-              </div>
-            )}
+            <div className="p-1.5 rounded bg-light ">
+              {isUser ? (
+                <UserRound size={18} />
+              ) : message.source == "llm_call_event" ? (
+                <Bug size={18} />
+              ) : (
+                <Bot size={18} />
+              )}
+            </div>
+
+            <span className="ml-2 text-sm font-semibold text-primary">
+              {!isUser && message.source}
+            </span>
+          </div>
+
+          <div className="flex flex-col w-full">
+            <div
+              className={`text-sm text-secondary ${isUser ? "text-right" : ""}`}
+            >
+              {messageUtils.isToolCallContent(content) ? (
+                <RenderToolCall content={content} />
+              ) : messageUtils.isFunctionExecutionResult(content) ? (
+                <RenderToolResult content={content} />
+              ) : (
+                <div className="ml-4"></div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
