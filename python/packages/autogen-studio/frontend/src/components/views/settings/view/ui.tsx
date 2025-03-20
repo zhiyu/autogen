@@ -232,6 +232,16 @@ export const UISettingsPanel: React.FC<UISettingsPanelProps> = ({ userId }) => {
           description="加载时自动展开消息内容"
           disabled={isSaving}
         />
+
+        <SettingToggle
+          checked={localUISettings.show_agent_flow_by_default ?? false}
+          onChange={(checked) =>
+            handleSettingChange("show_agent_flow_by_default", checked)
+          }
+          label="默认展示智能体工作流"
+          description="自动显示智能体任务执行流程图"
+          disabled={isSaving}
+        />
       </div>
 
       <div className="mt-4 hidden text-xs text-secondary">

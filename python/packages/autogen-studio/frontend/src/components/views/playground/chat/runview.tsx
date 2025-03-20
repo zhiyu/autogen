@@ -100,10 +100,9 @@ const RunView: React.FC<RunViewProps> = ({
   const isActive = run.status === "active" || run.status === "awaiting_input";
 
   const { uiSettings } = useSettingsStore();
-  const [isFlowVisible, setIsFlowVisible] = useState(true);
-  // const [isFlowVisible, setIsFlowVisible] = useState(
-  //   uiSettings.show_agent_flow_by_default ?? true
-  // );
+  const [isFlowVisible, setIsFlowVisible] = useState(
+    uiSettings.show_agent_flow_by_default ?? true
+  );
 
   const [isFunctionCallsVisible, setIsFunctionCallsVisible] = useState(false);
 
