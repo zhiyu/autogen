@@ -100,12 +100,12 @@ const RunView: React.FC<RunViewProps> = ({
   const isActive = run.status === "active" || run.status === "awaiting_input";
 
   const { uiSettings } = useSettingsStore();
-  const [isFlowVisible, setIsFlowVisible] = useState(false);
+  const [isFlowVisible, setIsFlowVisible] = useState(true);
   // const [isFlowVisible, setIsFlowVisible] = useState(
   //   uiSettings.show_agent_flow_by_default ?? true
   // );
 
-  const [isFunctionCallsVisible, setIsFunctionCallsVisible] = useState(true);
+  const [isFunctionCallsVisible, setIsFunctionCallsVisible] = useState(false);
 
   const visibleMessages = useMemo(() => {
     if (uiSettings.show_llm_call_events) {
@@ -313,6 +313,9 @@ const RunView: React.FC<RunViewProps> = ({
                             if (isFlowVisible) {
                               setIsFlowVisible(false);
                               setIsFunctionCallsVisible(true);
+                            } else {
+                              setIsFlowVisible(true);
+                              setIsFunctionCallsVisible(false);
                             }
                           }}
                           className={`p-1 rounded-md  hover:bg-secondary transition-colors ${

@@ -131,7 +131,7 @@ interface MessageProps {
   className?: string;
 }
 
-export const RenderMessage: React.FC<MessageProps> = ({
+export const RenderSteps: React.FC<MessageProps> = ({
   message,
   isLast = false,
   className = "",
@@ -180,11 +180,15 @@ export const RenderMessage: React.FC<MessageProps> = ({
             className={`text-sm text-secondary ${isUser ? "text-right" : ""}`}
           >
             {messageUtils.isToolCallContent(content) ? (
-              <RenderToolCall content={content} />
-            ) : messageUtils.isFunctionExecutionResult(content) ? (
-              <RenderToolResult content={content} />
+              <div className="ml-4 pl-5 border-secondary border-l-[1px]">
+                正在执行工具调用...
+              </div>
             ) : messageUtils.isMultiModalContent(content) ? (
               <RenderMultiModal content={content} />
+            ) : messageUtils.isFunctionExecutionResult(content) ? (
+              <div className="ml-4 pl-5 border-secondary border-l-[1px]">
+                工具调用已完成！
+              </div>
             ) : message.source === "llm_call_event" ? (
               <div className="ml-4 pl-5 border-secondary border-l-[1px]">
                 <LLMLogRenderer content={String(content)} />

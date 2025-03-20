@@ -13,7 +13,7 @@ export default function ToolCalls(
   run_id: number
 ) {
   return (
-    <>
+    <div className="sticky">
       {messages.map((msg, idx) => (
         <div key={"message_id" + idx + run_id} className="mr-2">
           {msg.config.source != "user" && (
@@ -24,6 +24,6 @@ export default function ToolCalls(
           )}
         </div>
       ))}
-    </>
+    </div>
   );
 }
