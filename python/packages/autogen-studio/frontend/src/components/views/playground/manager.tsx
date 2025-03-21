@@ -273,29 +273,33 @@ export const SessionManager: React.FC = () => {
         }`}
       >
         {session && sessions.length > 0 ? (
-          <div className="pl-4 flex gap-4">
+          <div className="p-4 flex gap-4">
             {/* Primary ChatView */}
             <div className={`flex-1 ${isCompareMode ? "w-1/2" : "w-full"}`}>
-              <ChatView
-                session={session}
-                isCompareMode={isCompareMode}
-                onCompareClick={handleCompareClick}
-                onSessionChange={handleSelectSession}
-                availableSessions={sessions}
-              />
+              <div className="h-[calc(100vh-30px)]">
+                <ChatView
+                  session={session}
+                  isCompareMode={isCompareMode}
+                  onCompareClick={handleCompareClick}
+                  onSessionChange={handleSelectSession}
+                  availableSessions={sessions}
+                />
+              </div>
             </div>
 
             {/* Comparison ChatView */}
             {isCompareMode && (
               <div className="flex-1 w-1/2 border-l border-secondary/20 pl-4">
-                <ChatView
-                  session={comparisonSession}
-                  isCompareMode={true}
-                  isSecondaryView={true}
-                  onExitCompare={handleExitCompare}
-                  onSessionChange={setComparisonSession}
-                  availableSessions={sessions}
-                />
+                <div className="h-[calc(100vh-30px)]">
+                  <ChatView
+                    session={comparisonSession}
+                    isCompareMode={true}
+                    isSecondaryView={true}
+                    onExitCompare={handleExitCompare}
+                    onSessionChange={setComparisonSession}
+                    availableSessions={sessions}
+                  />
+                </div>
               </div>
             )}
           </div>

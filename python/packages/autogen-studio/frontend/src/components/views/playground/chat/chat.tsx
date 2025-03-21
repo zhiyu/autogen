@@ -526,10 +526,10 @@ export default function ChatView({
   };
 
   return (
-    <div className="text-primary h-[calc(100vh-165px)] bg-primary relative rounded flex-1 scroll">
+    <div className="text-primary h-full bg-primary relative rounded flex flex-col overflow-scroll">
       {contextHolder}
-      <div className="flex pt-2 items-center justify-between text-sm h-10">
-        <div className="flex items-center gap-2 min-w-0 overflow-hidden flex-1 pr-4">
+      <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center gap-2 text-sm">
           {isCompareMode ? (
             <SessionDropdown
               session={session}
@@ -540,7 +540,7 @@ export default function ChatView({
           ) : (
             <>
               <span className="text-primary font-medium whitespace-nowrap flex-shrink-0">
-                Sessions
+                会话
               </span>
               {session && (
                 <>
@@ -560,108 +560,108 @@ export default function ChatView({
           {!isCompareMode && !isSecondaryView && showCompareButton && (
             <Button
               type="text"
+              size="small"
               onClick={onCompareClick}
               icon={<SplitSquareHorizontal className="w-4 h-4" />}
             >
-              Compare
+              对比
             </Button>
           )}
           {isCompareMode && isSecondaryView && (
             <Button
               type="text"
+              size="small"
               onClick={onExitCompare}
               icon={<X className="w-4 h-4" />}
             >
-              Exit Compare
+              退出
             </Button>
           )}
         </div>
       </div>
-      <div className="flex flex-col h-full">
-        <div
-          ref={chatContainerRef}
-          className="flex-1 overflow-y-auto scroll mt-2 min-h-0 relative"
-        >
-          <div id="scroll-gradient" className="scroll-gradient h-8 top-0">
-            {" "}
-            <span className="  inline-block h-6"></span>{" "}
-          </div>
-          <>
-            {teamConfig && (
-              <>
-                {/* Existing Runs */}
-                {existingRuns.map((run, index) => (
-                  <RunView
-                    teamConfig={teamConfig}
-                    key={run.id + "-review-" + index}
-                    run={run}
-                    isFirstRun={index === 0}
-                  />
-                ))}
+      <div
+        ref={chatContainerRef}
+        className="flex-1 overflow-y-auto scroll mt-2 min-h-0 relative mb-20"
+      >
+        <div id="scroll-gradient" className="scroll-gradient h-8 top-0">
+          {" "}
+          <span className="  inline-block h-6"></span>{" "}
+        </div>
+        <>
+          {teamConfig && (
+            <>
+              {/* Existing Runs */}
+              {existingRuns.map((run, index) => (
+                <RunView
+                  teamConfig={teamConfig}
+                  key={run.id + "-review-" + index}
+                  run={run}
+                  isFirstRun={index === 0}
+                />
+              ))}
 
-                {/* Current Run */}
-                {currentRun && (
-                  <RunView
-                    run={currentRun}
-                    teamConfig={teamConfig}
-                    onInputResponse={handleInputResponse}
-                    onCancel={handleCancel}
-                    isFirstRun={existingRuns.length === 0}
-                    streamingContent={streamingContent}
-                  />
-                )}
+              {/* Current Run */}
+              {currentRun && (
+                <RunView
+                  run={currentRun}
+                  teamConfig={teamConfig}
+                  onInputResponse={handleInputResponse}
+                  onCancel={handleCancel}
+                  isFirstRun={existingRuns.length === 0}
+                  streamingContent={streamingContent}
+                />
+              )}
 
-                {/* No existing runs */}
+              {/* No existing runs */}
 
-                {!currentRun && existingRuns.length === 0 && (
-                  <div className="flex items-center justify-center h-[80%]">
-                    <div className="text-center">
-                      <MessagesSquare
-                        strokeWidth={1}
-                        className="w-64 h-64 mb-4 inline-block"
-                      />
-                      <div className="  font-medium mb-2">开启新的会话</div>
-                      <div className="text-secondary text-sm">
-                        输入您的问题并点击发送以开始对话
-                      </div>
+              {!currentRun && existingRuns.length === 0 && (
+                <div className="flex items-center justify-center h-[80%]">
+                  <div className="text-center">
+                    <MessagesSquare
+                      strokeWidth={1}
+                      className="w-64 h-64 mb-4 inline-block"
+                    />
+                    <div className="  font-medium mb-2">开启新的会话</div>
+                    <div className="text-secondary text-sm">
+                      输入您的问题并点击发送以开始对话
                     </div>
                   </div>
-                )}
-              </>
-            )}
+                </div>
+              )}
+            </>
+          )}
 
-            {/* No team config */}
-            {!teamConfig && (
-              <div className="flex items-center justify-center h-[80%]">
-                <div className="text-center  ">
-                  <MessagesSquare
-                    strokeWidth={1}
-                    className="w-64 h-64 mb-4 inline-block"
-                  />
-                  <div className="  font-medium mb-2">
-                    No team configuration found for this session (may have been
-                    deleted).{" "}
-                  </div>
-                  <div className="text-secondary text-sm">
-                    Add a team to the session to get started.
-                  </div>
+          {/* No team config */}
+          {!teamConfig && (
+            <div className="flex items-center justify-center h-[80%]">
+              <div className="text-center  ">
+                <MessagesSquare
+                  strokeWidth={1}
+                  className="w-64 h-64 mb-4 inline-block"
+                />
+                <div className="  font-medium mb-2">
+                  No team configuration found for this session (may have been
+                  deleted).{" "}
+                </div>
+                <div className="text-secondary text-sm">
+                  Add a team to the session to get started.
                 </div>
               </div>
-            )}
-          </>
-        </div>
-
-        {session && teamConfig && (
-          <div className="flex-shrink-0">
-            <ChatInput
-              onSubmit={runTask}
-              loading={loading}
-              error={error}
-              disabled={currentRun?.status === "awaiting_input"}
-            />
-          </div>
-        )}
+            </div>
+          )}
+        </>
       </div>
+
+      {session && teamConfig && (
+        <div className="flex-shrink-0 absolute bottom-0 left-0 right-0">
+          <ChatInput
+            onSubmit={runTask}
+            loading={loading}
+            error={error}
+            disabled={currentRun?.status === "awaiting_input"}
+          />
+        </div>
+      )}
     </div>
   );
 }

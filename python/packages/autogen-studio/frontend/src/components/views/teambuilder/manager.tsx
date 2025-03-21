@@ -182,7 +182,7 @@ export const TeamManager: React.FC = () => {
       >
         <div className="relative w-full h-full">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 mb-4 text-sm p-2 px-4">
+          <div className="flex items-center gap-2 mb-4 text-sm p-4">
             <span className="text-primary font-medium">团队</span>
             {currentTeam && (
               <>

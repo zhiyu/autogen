@@ -193,7 +193,7 @@ const RunView: React.FC<RunViewProps> = ({
   const lastMessage = getLastMeaningfulMessage(visibleMessages);
 
   return (
-    <div className="space-y-6 gap-8 mr-2 ">
+    <div className="space-y-6 gap-8">
       {/* Run Header */}
       <div className={`${isFirstRun ? "mb-2" : "mt-4"} mb-4 pb-2 pt-2`}>
         <div className="text-xs text-secondary flex flex-row-reverse text-right">

@@ -91,7 +91,7 @@ const TestDrawer = ({ isVisble, onClose, team }: TestDrawerProps) => {
       >
         {loading && <p>Creating a test session...</p>}
         {session && (
-          <div className="h-[calc(100%-20px)]">
+          <div className="h-[calc(100vh-100px)]">
             <ChatView session={session} showCompareButton={false} />
           </div>
         )}

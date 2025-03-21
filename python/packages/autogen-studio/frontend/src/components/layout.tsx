@@ -139,7 +139,7 @@ const Layout = ({
                 : theme.defaultAlgorithm,
           }}
         >
-          <main className="flex-1 p-2 text-primary">{children}</main>
+          <main className="flex-1 p-0 text-primary">{children}</main>
         </ConfigProvider>
 
         {/* <Footer /> */}

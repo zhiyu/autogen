@@ -44,7 +44,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
           <Tooltip title={`Galleries (${galleries.length})`}>
             <button
               onClick={onToggle}
-              className="p-2 rounded-md hover:bg-secondary hover:text-accent text-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50"
+              className="p-4 pl-3 rounded-md hover:bg-secondary hover:text-accent text-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50"
             >
               <PanelLeftOpen strokeWidth={1.5} className="h-6 w-6" />
             </button>
@@ -67,7 +67,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
 
   // Render expanded state
   return (
-    <div className="h-full border-r border-secondary px-2">
+    <div className="h-full border-r border-secondary p-2 pl-4">
       {/* Header */}
       <div className="flex items-center justify-between pt-0 py-4">
         <div className="flex items-center gap-2">

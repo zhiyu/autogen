@@ -343,7 +343,7 @@ export const TeamBuilder: React.FC<TeamBuilderProps> = ({
     <div className="absolute top-0 bottom-0 right-0 left-0 flex flex-col">
       {contextHolder}
 
-      <div className="flex items-center gap-2 text-xs px-4 pb-3 pt-1 justify-end">
+      <div className="flex items-center gap-2 text-xs px-4 pb-3 pt-3 justify-end">
         {validationResults && !validationResults.is_valid && (
           <div className="inline-block mr-2">
             <ValidationErrors validation={validationResults} />

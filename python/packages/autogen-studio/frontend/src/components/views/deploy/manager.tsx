@@ -54,7 +54,7 @@ export const DeployManager: React.FC = () => {
           isSidebarOpen ? "ml-64" : "ml-12"
         }`}
       >
-        <div className="p-4 pt-2">
+        <div className="p-4">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 mb-4 text-sm">
             <span className="text-primary font-medium">部署指南</span>
