@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from "react";
-import { Button, Breadcrumb } from "antd";
-import { ChevronLeft, Code, FormInput } from "lucide-react";
+import { Button, Breadcrumb, message, Tooltip } from "antd";
+import { ChevronLeft, Code, FormInput, PlayCircle } from "lucide-react";
 import { Component, ComponentConfig } from "../../../../types/datamodel";
 import {
   isTeamComponent,
@@ -395,7 +395,7 @@ export const ComponentEditor: React.FC<ComponentEditorProps> = ({
         <div className="flex justify-end gap-2 mt-6 pt-4 border-t border-secondary">
           <Button onClick={onClose}>Cancel</Button>
           <Button type="primary" onClick={handleSave}>
-            保存
+            Save Changes
           </Button>
         </div>
       )}

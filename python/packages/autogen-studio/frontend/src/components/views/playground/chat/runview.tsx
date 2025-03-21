@@ -6,6 +6,7 @@ import {
   CheckCircle,
   AlertTriangle,
   Bot,
+  Workflow,
   SquareFunction,
 } from "lucide-react";
 import { Run, Message, TeamConfig, Component } from "../../../types/datamodel";
