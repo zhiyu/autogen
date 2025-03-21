@@ -5,12 +5,8 @@ import {
   Loader2,
   CheckCircle,
   AlertTriangle,
-  TriangleAlertIcon,
-  ChevronDown,
-  ChevronUp,
   Bot,
-  PanelRightClose,
-  PanelRightOpen,
+  SquareFunction,
 } from "lucide-react";
 import { Run, Message, TeamConfig, Component } from "../../../types/datamodel";
 import AgentFlow from "./agentflow/agentflow";
