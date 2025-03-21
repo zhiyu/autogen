@@ -1,4 +1,4 @@
-import React, { memo, useState, useRef } from "react";
+import React, { memo, useState } from "react";
 import {
   ArrowDown,
   ArrowUp,
@@ -13,8 +13,6 @@ import {
 import ReactMarkdown from "react-markdown";
 import { Tooltip } from "antd";
 import remarkGfm from "remark-gfm";
-
-import { MonacoEditor } from "./monaco";
 
 export const LoadingIndicator = ({ size = 16 }: { size: number }) => (
   <div className="inline-flex items-center gap-2 text-accent   mr-2">
@@ -73,8 +71,8 @@ export const TruncatableText = memo(
     isJson = false,
     className = "",
     jsonThreshold = 1000,
-    textThreshold = 1000,
-    showFullscreen = false,
+    textThreshold = 500,
+    showFullscreen = true,
   }: {
     content: string;
     isJson?: boolean;
@@ -100,47 +98,11 @@ export const TruncatableText = memo(
         : content;
     const proseClassName =
       " dark:prose-invert prose-table:border-hidden prose-td:border-t prose-th:border-b prose-ul:list-disc prose-sm prose-ol:list-decimal ";
-
-    const editorRef = useRef(null);
-
-    let _content;
-    try {
-      _content = JSON.parse(content);
-    } catch (e) {
-      console.log(e);
-    }
-
-    console.log(typeof _content);
     return (
       <div className="relative">
-        {_content && (
-          <MonacoEditor
-            value={
-              typeof _content == "string"
-                ? _content
-                : JSON.stringify(_content, null, "\t")
-            }
-            editorRef={editorRef}
-            language="json"
-            options={{
-              wordWrap: "on",
-              wrappingIndent: "indent",
-              wrappingStrategy: "advanced",
-              minimap: {
-                enabled: false,
-              },
-              readOnly: true,
-              automaticLayout: true,
-            }}
-            className="min-h-[100px] mt-2"
-          />
-        )}
-
-        {!_content && (
-          <div>
-            <div
-              className={`
-            transition-[max-height,opacity] overflow-auto scroll duration-500 ease-in-out
+        <div
+          className={`
+            transition-[max-height,opacity] overflow-auto scroll  duration-500 ease-in-out
             ${
               shouldTruncate && !isExpanded
                 ? "max-h-[300px]"
@@ -148,90 +110,84 @@ export const TruncatableText = memo(
             }
             ${className}
           `}
-            >
-              <ReactMarkdown
-                className={
-                  isExpanded
-                    ? `mt-4 text-sm text-primary ${proseClassName}`
-                    : ""
-                }
-                remarkPlugins={[remarkGfm]}
+        >
+          <ReactMarkdown
+            className={
+              isExpanded ? `mt-4 text-sm text-primary ${proseClassName}` : ""
+            }
+            remarkPlugins={[remarkGfm]}
+          >
+            {displayContent}
+          </ReactMarkdown>
+          {shouldTruncate && !isExpanded && (
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-secondary to-transparent opacity-20" />
+          )}
+        </div>
+
+        {shouldTruncate && (
+          <div className="mt-2 flex items-center justify-end gap-2">
+            <Tooltip title={isExpanded ? "Show less" : "Show more"}>
+              <button
+                type="button"
+                onClick={toggleExpand}
+                className="inline-flex items-center justify-center p-2 rounded bg-secondary text-primary hover:text-accent hover:scale-105 transition-all duration-300 z-10"
+                aria-label={isExpanded ? "Show less" : "Show more"}
               >
-                {displayContent}
-              </ReactMarkdown>
-              {shouldTruncate && !isExpanded && (
-                <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-secondary to-transparent opacity-20" />
-              )}
-            </div>
+                {isExpanded ? (
+                  <ChevronUp size={18} />
+                ) : (
+                  <ChevronDown size={18} />
+                )}
+              </button>
+            </Tooltip>
 
-            {shouldTruncate && (
-              <div className="mt-2 flex items-center justify-end gap-2">
-                <Tooltip title={isExpanded ? "Show less" : "Show more"}>
-                  <button
-                    type="button"
-                    onClick={toggleExpand}
-                    className="inline-flex items-center justify-center p-2 rounded bg-secondary text-primary hover:text-accent hover:scale-105 transition-all duration-300 z-10"
-                    aria-label={isExpanded ? "Show less" : "Show more"}
+            {showFullscreen && (
+              <Tooltip title="Fullscreen">
+                <button
+                  type="button"
+                  onClick={() => setIsFullscreen(true)}
+                  className="inline-flex items-center justify-center p-2 rounded bg-secondary text-primary hover:text-accent hover:scale-105 transition-all duration-300 z-10"
+                  aria-label="Toggle fullscreen"
+                >
+                  <Maximize2 size={18} />
+                </button>
+              </Tooltip>
+            )}
+          </div>
+        )}
+
+        {isFullscreen && (
+          <div
+            className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center"
+            onClick={() => setIsFullscreen(false)}
+          >
+            <div
+              className="relative bg-secondary scroll w-full h-full md:w-4/5 md:h-4/5 md:rounded-lg p-8 overflow-auto"
+              style={{ opacity: 0.95 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Tooltip title="Close">
+                <button
+                  onClick={() => setIsFullscreen(false)}
+                  className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 text-primary transition-colors"
+                  aria-label="Close fullscreen view"
+                >
+                  <X size={24} />
+                </button>
+              </Tooltip>
+              <div className={`mt-8 text-base text-primary ${proseClassName}`}>
+                {isJson ? (
+                  <pre className="whitespace-pre-wrap">{content}</pre>
+                ) : (
+                  <ReactMarkdown
+                    className="text-primary"
+                    remarkPlugins={[remarkGfm]}
                   >
-                    {isExpanded ? (
-                      <ChevronUp size={18} />
-                    ) : (
-                      <ChevronDown size={18} />
-                    )}
-                  </button>
-                </Tooltip>
-
-                {showFullscreen && (
-                  <Tooltip title="Fullscreen">
-                    <button
-                      type="button"
-                      onClick={() => setIsFullscreen(true)}
-                      className="inline-flex items-center justify-center p-2 rounded bg-secondary text-primary hover:text-accent hover:scale-105 transition-all duration-300 z-10"
-                      aria-label="Toggle fullscreen"
-                    >
-                      <Maximize2 size={18} />
-                    </button>
-                  </Tooltip>
+                    {content}
+                  </ReactMarkdown>
                 )}
               </div>
-            )}
-
-            {isFullscreen && (
-              <div
-                className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center"
-                onClick={() => setIsFullscreen(false)}
-              >
-                <div
-                  className="relative bg-secondary scroll w-full h-full md:w-4/5 md:h-4/5 md:rounded-lg p-8 overflow-auto"
-                  style={{ opacity: 0.95 }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Tooltip title="Close">
-                    <button
-                      onClick={() => setIsFullscreen(false)}
-                      className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 text-primary transition-colors"
-                      aria-label="Close fullscreen view"
-                    >
-                      <X size={24} />
-                    </button>
-                  </Tooltip>
-                  <div
-                    className={`mt-8 text-base text-primary ${proseClassName}`}
-                  >
-                    {isJson ? (
-                      <pre className="whitespace-pre-wrap">{content}</pre>
-                    ) : (
-                      <ReactMarkdown
-                        className="text-primary"
-                        remarkPlugins={[remarkGfm]}
-                      >
-                        {content}
-                      </ReactMarkdown>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
+            </div>
           </div>
         )}
       </div>

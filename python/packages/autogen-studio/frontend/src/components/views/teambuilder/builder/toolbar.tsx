@@ -114,6 +114,32 @@ export const TeamBuilderToolbar: React.FC<TeamBuilderToolbarProps> = ({
           </>
         )}
 
+        <Tooltip title="Save Changes">
+          <Button
+            type="text"
+            icon={
+              <div className="relative">
+                <Save size={18} />
+                {isDirty && (
+                  <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
+                )}
+              </div>
+            }
+            className="p-1.5 hover:bg-primary/10 rounded-md text-primary/75 hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={onSave}
+            // disabled={!isDirty}
+          />
+        </Tooltip>
+
+        <Tooltip title={isJsonMode ? "Switch to Visual" : "Switch to JSON"}>
+          <Button
+            type="text"
+            icon={isJsonMode ? <Cable size={18} /> : <Code2 size={18} />}
+            className="p-1.5 hover:bg-primary/10 rounded-md text-primary/75 hover:text-primary"
+            onClick={onToggleView}
+          />
+        </Tooltip>
+
         {!isJsonMode && (
           <Dropdown
             menu={{ items: menuItems }}

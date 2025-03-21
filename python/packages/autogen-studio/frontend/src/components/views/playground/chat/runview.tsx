@@ -5,10 +5,12 @@ import {
   Loader2,
   CheckCircle,
   AlertTriangle,
+  TriangleAlertIcon,
+  ChevronDown,
+  ChevronUp,
   Bot,
   PanelRightClose,
-  Workflow,
-  SquareFunction,
+  PanelRightOpen,
 } from "lucide-react";
 import { Run, Message, TeamConfig, Component } from "../../../types/datamodel";
 import AgentFlow from "./agentflow/agentflow";
@@ -96,6 +98,7 @@ const RunView: React.FC<RunViewProps> = ({
   isFirstRun = false,
   streamingContent,
 }) => {
+  const [isExpanded, setIsExpanded] = useState(true);
   const threadContainerRef = useRef<HTMLDivElement | null>(null);
   const isActive = run.status === "active" || run.status === "awaiting_input";
 

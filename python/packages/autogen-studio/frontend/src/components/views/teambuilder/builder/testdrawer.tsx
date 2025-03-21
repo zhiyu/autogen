@@ -20,7 +20,7 @@ const TestDrawer = ({ isVisble, onClose, team }: TestDrawerProps) => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const createSession = async (teamId: number, teamName: string) => {
-    if (!user?.email) return;
+    if (!user?.id) return;
     try {
       const defaultName = `${teamName.substring(
         0,
@@ -31,7 +31,7 @@ const TestDrawer = ({ isVisble, onClose, team }: TestDrawerProps) => {
           name: defaultName,
           team_id: teamId,
         },
-        user.email
+        user.id
       );
       setSession(created);
     } catch (error) {
@@ -40,9 +40,9 @@ const TestDrawer = ({ isVisble, onClose, team }: TestDrawerProps) => {
   };
 
   const deleteSession = async (sessionId: number) => {
-    if (!user?.email) return;
+    if (!user?.id) return;
     try {
-      await sessionAPI.deleteSession(sessionId, user.email);
+      await sessionAPI.deleteSession(sessionId, user.id);
       setSession(null); // Clear session state after successful deletion
     } catch (error) {
       messageApi.error("Error deleting session");
@@ -92,7 +92,7 @@ const TestDrawer = ({ isVisble, onClose, team }: TestDrawerProps) => {
         {loading && <p>Creating a test session...</p>}
         {session && (
           <div className="h-[calc(100%-20px)]">
-            <ChatView session={session} />
+            <ChatView session={session} showCompareButton={false} />
           </div>
         )}
       </Drawer>

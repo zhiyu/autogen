@@ -11,20 +11,16 @@ import {
   LucideIcon,
   Users,
   Wrench,
-  Settings,
   Brain,
   Timer,
   Trash2Icon,
   Edit,
   Bot,
 } from "lucide-react";
-import { NodeData, CustomNode } from "./types";
+import { CustomNode } from "./types";
 import {
   AgentConfig,
   TeamConfig,
-  ModelConfig,
-  ToolConfig,
-  TerminationConfig,
   ComponentTypes,
   Component,
   ComponentConfig,
@@ -34,13 +30,7 @@ import { TruncatableText } from "../../atoms";
 import { useTeamBuilderStore } from "./store";
 import {
   isAssistantAgent,
-  isAzureOpenAIModel,
-  isFunctionTool,
-  isMaxMessageTermination,
-  isOpenAIModel,
-  isOrTermination,
   isSelectorTeam,
-  isTextMentionTermination,
   isWebSurferAgent,
 } from "../../../types/guards";
 
@@ -124,7 +114,7 @@ const BaseNode = memo<BaseNodeProps>(
       <div
         ref={dragHandle}
         className={`
-        bg-white text-primary relative rounded-lg  w-72 border-2 border-secondary
+        bg-white text-primary relative rounded-lg shadow-lg w-72 
         ${selected ? "ring-2 ring-accent" : ""}
         ${className || ""} 
         transition-all duration-200

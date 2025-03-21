@@ -40,25 +40,25 @@ interface INavItem {
 
 const navigation: INavItem[] = [
   {
-    name: "team",
+    name: "团队",
     href: "/build",
     icon: Bot,
     breadcrumbs: [{ name: "团队", href: "/build", current: true }],
   },
   {
-    name: "playground",
+    name: "会话",
     href: "/",
     icon: MessagesSquare,
     breadcrumbs: [{ name: "会话", href: "/", current: true }],
   },
   {
-    name: "gallery",
+    name: "模板库",
     href: "/gallery",
     icon: GalleryVerticalEnd,
     breadcrumbs: [{ name: "模板库", href: "/gallery", current: true }],
   },
   {
-    name: "deploy",
+    name: "部署",
     href: "/deploy",
     icon: Rocket,
     breadcrumbs: [{ name: "部署", href: "/deploy", current: true }],
@@ -206,6 +206,7 @@ const Sidebar = ({ link, meta, isMobile }: SidebarProps) => {
                           : "text-secondary hover:bg-tertiary hover:text-accent"
                       )}
                     >
+                      {" "}
                       <IconComponent
                         className={classNames(
                           "h-6 w-6 shrink-0",
@@ -214,7 +215,7 @@ const Sidebar = ({ link, meta, isMobile }: SidebarProps) => {
                             : "text-secondary group-hover:text-accent"
                         )}
                       />
-                      {showFull && t("navigation." + item.name)}
+                      {showFull && item.name}
                     </Link>
                   </div>
                 );
@@ -222,10 +223,7 @@ const Sidebar = ({ link, meta, isMobile }: SidebarProps) => {
                 return (
                   <li key={item.name}>
                     {!showFull && !isMobile ? (
-                      <Tooltip
-                        title={t("navigation." + item.name)}
-                        placement="right"
-                      >
+                      <Tooltip title={item.name} placement="right">
                         {navLink}
                       </Tooltip>
                     ) : (

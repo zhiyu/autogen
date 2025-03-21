@@ -105,13 +105,7 @@
       <div id="messages"></div>
       <div id="input-container">
         <input type="text" id="message-input" placeholder="Type a message..." />
-        <button
-          id="send-button"
-          onclick="sendMessage()"
-          style="margin-left: 10px"
-        >
-          发送
-        </button>
+        <button id="send-button" onclick="sendMessage()">Send</button>
       </div>
     </div>
 
@@ -120,7 +114,7 @@
 
       ws.onmessage = function (event) {
         const message = JSON.parse(event.data);
-        console.log(message.type);
+
         if (message.type === "UserInputRequestedEvent") {
           // Re-enable input and send button if UserInputRequestedEvent is received
           enableInput();
@@ -131,14 +125,6 @@
         } else {
           // Display regular message
           displayMessage(message.content, message.source);
-        }
-
-        if (
-          message.content &&
-          message.content.indexOf &&
-          message.content.indexOf("TERMINATE") != -1
-        ) {
-          enableInput();
         }
       };
 
@@ -178,7 +164,6 @@
       }
 
       function displayMessage(content, source) {
-        console.log();
         const messagesContainer = document.getElementById("messages");
         const messageElement = document.createElement("div");
         messageElement.className = `message ${source}`;
@@ -189,11 +174,7 @@
 
         const contentElement = document.createElement("div");
         contentElement.className = "content";
-        if (typeof content == "object") {
-          contentElement.textContent = JSON.stringify(content);
-        } else {
-          contentElement.textContent = content;
-        }
+        contentElement.textContent = content;
 
         messageElement.appendChild(labelElement);
         messageElement.appendChild(contentElement);

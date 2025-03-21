@@ -46,6 +46,7 @@ import TestDrawer from "./testdrawer";
 import { validationAPI, ValidationResponse } from "../api";
 import { ValidationErrors } from "./validationerrors";
 import ComponentEditor from "./component-editor/component-editor";
+import { useGalleryStore } from "../../gallery/store";
 
 const { Sider, Content } = Layout;
 interface DragItemData {
@@ -85,7 +86,7 @@ export const TeamBuilder: React.FC<TeamBuilderProps> = ({
   const [validationLoading, setValidationLoading] = useState(false);
 
   const [testDrawerVisible, setTestDrawerVisible] = useState(false);
-
+  const defaultGallery = useGalleryStore((state) => state.getSelectedGallery());
   const {
     undo,
     redo,
@@ -461,7 +462,9 @@ export const TeamBuilder: React.FC<TeamBuilderProps> = ({
         onDragStart={handleDragStart}
       >
         <Layout className=" relative bg-primary  ">
-          {!isJsonMode && <ComponentLibrary />}
+          {!isJsonMode && defaultGallery && (
+            <ComponentLibrary defaultGallery={defaultGallery} />
+          )}
 
           <Content className="relative bg-tertiary  ">
             <div

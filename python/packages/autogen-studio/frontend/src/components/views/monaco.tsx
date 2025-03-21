@@ -8,15 +8,6 @@ export const MonacoEditor = ({
   onChange,
   minimap = true,
   className,
-  options = {
-    wordWrap: "on",
-    wrappingIndent: "indent",
-    wrappingStrategy: "advanced",
-    minimap: {
-      enabled: false,
-    },
-    automaticLayout: true,
-  },
 }: {
   value: string;
   onChange?: (value: string) => void;
@@ -24,7 +15,6 @@ export const MonacoEditor = ({
   language: string;
   minimap?: boolean;
   className?: string;
-  options?: any;
 }) => {
   const [isEditorReady, setIsEditorReady] = useState(false);
   const onEditorDidMount = (editor: any, monaco: any) => {
@@ -32,18 +22,29 @@ export const MonacoEditor = ({
     setIsEditorReady(true);
   };
   return (
-    <Editor
-      className={`h-full rounded ${className}`}
-      defaultLanguage={language}
-      defaultValue={value}
-      value={value}
-      onChange={(value: string | undefined) => {
-        if (onChange && value) {
-          onChange(value);
-        }
-      }}
-      onMount={onEditorDidMount}
-      options={options}
-    />
+    <div id="monaco-editor" className={`h-full rounded ${className}`}>
+      <Editor
+        height="100%"
+        className="h-full rounded"
+        defaultLanguage={language}
+        defaultValue={value}
+        value={value}
+        onChange={(value: string | undefined) => {
+          if (onChange && value) {
+            onChange(value);
+          }
+        }}
+        onMount={onEditorDidMount}
+        theme="vs-dark"
+        options={{
+          wordWrap: "on",
+          wrappingIndent: "indent",
+          wrappingStrategy: "advanced",
+          minimap: {
+            enabled: minimap,
+          },
+        }}
+      />
+    </div>
   );
 };

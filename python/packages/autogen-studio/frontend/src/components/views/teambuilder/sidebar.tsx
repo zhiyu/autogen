@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Tooltip, Select } from "antd";
+import { Button, Tooltip, Select, message } from "antd";
 import {
   Bot,
   Plus,
@@ -41,6 +41,7 @@ export const TeamSidebar: React.FC<TeamSidebarProps> = ({
 }) => {
   // Tab state - "recent" or "gallery"
   const [activeTab, setActiveTab] = useState<"recent" | "gallery">("recent");
+  const [messageApi, contextHolder] = message.useMessage();
 
   // Gallery store
   const {
@@ -90,6 +91,8 @@ export const TeamSidebar: React.FC<TeamSidebarProps> = ({
     newTeam.component.label =
       "default_team" + new Date().getTime().toString().slice(0, 2);
     onCreateTeam(newTeam);
+    setActiveTab("recent");
+    messageApi.success(`"${newTeam.component.label}" added to Recents`);
   };
 
   // Render expanded state
@@ -299,6 +302,10 @@ export const TeamSidebar: React.FC<TeamSidebarProps> = ({
                               },
                             };
                             onCreateTeam(newTeam);
+                            setActiveTab("recent");
+                            message.success(
+                              `"${newTeam.component.label}" added to Recents`
+                            );
                           }}
                         />
                       </Tooltip>
