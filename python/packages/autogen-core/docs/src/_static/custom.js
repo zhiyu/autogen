@@ -47,6 +47,24 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  const themeButton = document.querySelector(".theme-switch-button");
+  if (themeButton) {
+    themeButton.addEventListener("click", function () {
+      const mode = document.documentElement.getAttribute("data-mode");
+      announceMessage(liveRegion, `Theme changed to ${mode}`);
+    });
+  }
+
+  // Enhance TOC sections for accessibility
+  document.querySelectorAll(".caption-text").forEach((caption) => {
+    const sectionTitle = caption.textContent.trim();
+    const captionContainer = caption.closest("p.caption");
+    if (!captionContainer) return;
+
+    // Find and process navigation lists that belong to this section
+    findSectionNav(captionContainer, sectionTitle);
+  });
+
   // Version dropdown menu is dynamically generated after page load. Listen for changes to set aria-selected
   var observer = new MutationObserver(function () {
     document.querySelectorAll(".dropdown-item").forEach(function (element) {
