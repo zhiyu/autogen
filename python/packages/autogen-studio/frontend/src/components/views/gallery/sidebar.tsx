@@ -51,7 +51,7 @@ export const GallerySidebar: React.FC<GallerySidebarProps> = ({
           </Tooltip>
         </div>
 
-        <div className="mt-4 px-2 -ml-1">
+        <div className="mt-4 px-2">
           <Tooltip title="Create new gallery">
             <Button
               type="text"

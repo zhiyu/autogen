@@ -56,7 +56,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </Tooltip>
         </div>
-        <div className="mt-4 px-2 -ml-1">
+        <div className="mt-4 px-2">
           <Tooltip title="新建会话">
             <Button
               type="text"

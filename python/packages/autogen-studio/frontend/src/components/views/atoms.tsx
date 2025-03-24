@@ -70,8 +70,8 @@ export const TruncatableText = memo(
     content = "",
     isJson = false,
     className = "",
-    jsonThreshold = 1000,
-    textThreshold = 500,
+    jsonThreshold = 100,
+    textThreshold = 100,
     showFullscreen = true,
   }: {
     content: string;
@@ -81,7 +81,7 @@ export const TruncatableText = memo(
     textThreshold?: number;
     showFullscreen?: boolean;
   }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(true);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const threshold = isJson ? jsonThreshold : textThreshold;
     content = safeJsonStringify(content) + "";
@@ -96,6 +96,7 @@ export const TruncatableText = memo(
       shouldTruncate && !isExpanded
         ? content.slice(0, threshold) + "..."
         : content;
+
     const proseClassName =
       " dark:prose-invert prose-table:border-hidden prose-td:border-t prose-th:border-b prose-ul:list-disc prose-sm prose-ol:list-decimal ";
     return (
@@ -113,15 +114,15 @@ export const TruncatableText = memo(
         >
           <ReactMarkdown
             className={
-              isExpanded ? `mt-4 text-sm text-primary ${proseClassName}` : ""
+              isExpanded ? `mt-0 text-sm text-primary ${proseClassName}` : ""
             }
             remarkPlugins={[remarkGfm]}
           >
             {displayContent}
           </ReactMarkdown>
-          {shouldTruncate && !isExpanded && (
+          {/* {shouldTruncate && !isExpanded && (
             <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-secondary to-transparent opacity-20" />
-          )}
+          )} */}
         </div>
 
         {shouldTruncate && (
