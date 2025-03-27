@@ -125,9 +125,7 @@ const InputRequestView: React.FC<InputRequestProps> = ({
           disabled={disabled || isSubmitting}
           className="text-primary flex-1 px-3 py-2 rounded bg-tertiary border border-secondary focus:border-accent focus:ring-1 focus:ring-accent outline-none disabled:opacity-50"
           placeholder={
-            disabled
-              ? "Input timeout - please restart the conversation"
-              : "Type your response..."
+            disabled ? "等待超时 - 请重新开启对话" : "输入您要回复的内容"
           }
         />
         <button
@@ -144,7 +142,7 @@ const InputRequestView: React.FC<InputRequestProps> = ({
           ) : (
             <SendHorizontal size={16} />
           )}
-          <span>Submit</span>
+          <span>提交</span>
         </button>
       </div>
     </div>

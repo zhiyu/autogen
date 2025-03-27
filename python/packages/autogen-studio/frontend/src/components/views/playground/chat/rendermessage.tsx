@@ -162,11 +162,11 @@ export const RenderMessage: React.FC<MessageProps> = ({
         >
           <div className="p-1.5 rounded bg-light ">
             {isUser ? (
-              <UserRound size={18} />
+              <UserRound size={20} />
             ) : message.source == "llm_call_event" ? (
-              <Bug size={18} />
+              <Bug size={16} />
             ) : (
-              <Bot size={18} />
+              <Bot size={16} />
             )}
           </div>
 

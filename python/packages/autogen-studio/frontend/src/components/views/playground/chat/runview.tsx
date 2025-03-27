@@ -18,6 +18,8 @@ import { Tooltip } from "antd";
 import { getRelativeTimeString, LoadingDots } from "../../atoms";
 import { useSettingsStore } from "../../settings/store";
 
+import { PiUsersThree } from "react-icons/pi";
+
 interface RunViewProps {
   run: Run;
   teamConfig?: Component<TeamConfig>;
@@ -150,16 +152,7 @@ const RunView: React.FC<RunViewProps> = ({
           </div>
         );
       case "awaiting_input":
-        return (
-          <div className="text-sm mb-2">
-            <MessageSquare
-              size={20}
-              className="inline-block mr-2 text-accent"
-            />
-            <span className="inline-block mr-2">Waiting for your input </span>
-            <LoadingDots size={8} />
-          </div>
-        );
+        return <div className="text-sm mb-2"></div>;
       case "complete":
         return (
           <div className="text-sm mb-2">
@@ -226,10 +219,10 @@ const RunView: React.FC<RunViewProps> = ({
           <div className="flex flex-col items-start">
             <div className="flex items-center gap-2 mb-1">
               <div className="p-1.5 rounded bg-secondary text-primary">
-                <Bot size={20} />
+                <PiUsersThree size={18} />
               </div>
-              <span className="text-sm font-medium text-primary">
-                {teamConfig && teamConfig.label}团队
+              <span className="text-lg font-medium text-primary">
+                {teamConfig && teamConfig.label}
               </span>
             </div>
 
@@ -367,7 +360,7 @@ const RunView: React.FC<RunViewProps> = ({
                         {run.status === "awaiting_input" && onInputResponse && (
                           <div className="mt-4 mr-2">
                             <InputRequestView
-                              prompt="Type your response..."
+                              prompt="等待回复..."
                               onSubmit={onInputResponse}
                             />
                           </div>
