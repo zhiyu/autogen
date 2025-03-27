@@ -159,7 +159,7 @@ export const ComponentLibrary: React.FC<LibraryProps> = ({
     return (
       <div
         onClick={() => setIsMinimized(false)}
-        className="absolute group top-4 left-4 bg-primary shadow-md rounded px-4 pr-2 py-2 cursor-pointer transition-all duration-300 z-50 flex items-center gap-2"
+        className="absolute group top-4 left-4 bg-primary shadow rounded px-4 pr-2 py-2 cursor-pointer transition-all duration-300 z-50 flex items-center gap-2"
       >
         <span>显示组件库</span>
         <button
@@ -176,9 +176,9 @@ export const ComponentLibrary: React.FC<LibraryProps> = ({
   return (
     <Sider
       width={260}
-      className="absolute top-4 left-4 bg-primary  z-10 mr-2 border border-secondary rounded"
+      className="absolute top-4 left-4 bg-primary z-10 mr-2 border border-secondary rounded-lg"
     >
-      <div className="rounded">
+      <div>
         <div className="flex justify-between items-center mb-2 p-2 px-4">
           <div className="text-normal">组件库</div>
           <button

@@ -393,9 +393,9 @@ export const ComponentEditor: React.FC<ComponentEditorProps> = ({
       )}
       {onClose && (
         <div className="flex justify-end gap-2 mt-6 pt-4 border-t border-secondary">
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>取消</Button>
           <Button type="primary" onClick={handleSave}>
-            Save Changes
+            保存更改
           </Button>
         </div>
       )}

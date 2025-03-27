@@ -48,6 +48,8 @@ import { ValidationErrors } from "./validationerrors";
 import ComponentEditor from "./component-editor/component-editor";
 import { useGalleryStore } from "../../gallery/store";
 
+import { PiPlay } from "react-icons/pi";
+
 const { Sider, Content } = Layout;
 interface DragItemData {
   type: ComponentTypes;
@@ -445,8 +447,8 @@ export const TeamBuilder: React.FC<TeamBuilderProps> = ({
         <Tooltip title="运行">
           <Button
             type="primary"
-            icon={<PlayCircle size={18} />}
-            className="p-1.5 ml-2 px-2.5 hover:bg-primary/10 rounded-md text-primary/75 hover:text-primary"
+            icon={<PiPlay size={14} />}
+            className="p-1.5 ml-2 px-2.5 pl-2 hover:bg-primary/10 rounded text-primary/75 hover:text-primary"
             onClick={() => {
               setTestDrawerVisible(true);
             }}
@@ -532,7 +534,7 @@ export const TeamBuilder: React.FC<TeamBuilderProps> = ({
 
           {selectedNodeId && (
             <Drawer
-              title="Edit Component"
+              title="编辑"
               placement="right"
               size="large"
               onClose={() => setSelectedNode(null)}
