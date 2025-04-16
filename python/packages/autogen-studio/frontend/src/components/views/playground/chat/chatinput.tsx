@@ -47,7 +47,7 @@ export default function ChatInput({
 }: ChatInputProps) {
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
   const [previousLoading, setPreviousLoading] = React.useState(loading);
-  const [text, setText] = React.useState("What is the capital of France?");
+  const [text, setText] = React.useState("");
   const [fileList, setFileList] = React.useState<UploadFile[]>([]);
   const [dragOver, setDragOver] = React.useState(false);
   const [notificationApi, notificationContextHolder] =
@@ -416,20 +416,14 @@ export default function ChatInput({
             value={text}
             onChange={handleTextChange}
             onKeyDown={handleKeyDown}
-            className={`flex items-center w-full resize-none text-gray-600 rounded ${
-              dragOver
-                ? "border-2 border-blue-500 bg-blue-50"
-                : "border border-accent bg-white"
+            className={`flex items-center w-full resize-none text-gray-600 rounded border border-gray bg-white px-4 py-5 pr-28 ${
+              dragOver ? "border-2 border-blue-500 bg-blue-50" : ""
             } p-2 pl-5 pr-16 ${isInputDisabled ? "cursor-not-allowed" : ""}`}
             style={{
               maxHeight: "120px",
-              overflowY: "auto",
-              minHeight: "50px",
               transition: "all 0.2s ease-in-out",
             }}
-            placeholder={
-              dragOver ? "Drop files here..." : "Type your message here..."
-            }
+            placeholder={dragOver ? "Drop files here..." : "请输入..."}
             disabled={isInputDisabled}
           />
           <div className={`absolute right-3 bottom-2 flex gap-2`}>
@@ -441,7 +435,10 @@ export default function ChatInput({
               }`}
             >
               {" "}
-              <Upload className="zero-padding-upload  " {...uploadProps}>
+              <Upload
+                className="absolute right-12 bottom-1  zero-padding-upload  "
+                {...uploadProps}
+              >
                 <Tooltip
                   title=<span className="text-sm">
                     Upload File{" "}
@@ -452,8 +449,8 @@ export default function ChatInput({
                   <Button type="text" disabled={isInputDisabled} className=" ">
                     <UploadIcon
                       strokeWidth={2}
-                      size={26}
-                      className="p-1 inline-block w-8 text-accent"
+                      size={28}
+                      className="p-1 inline-block text-accent"
                     />
                   </Button>
                 </Tooltip>
@@ -463,19 +460,15 @@ export default function ChatInput({
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={
-                isInputDisabled || (text.trim() === "" && fileList.length === 0)
-              }
-              className={`bg-accent transition duration-300 rounded flex justify-center items-center w-11 h-9 ${
-                isInputDisabled || (text.trim() === "" && fileList.length === 0)
-                  ? "cursor-not-allowed opacity-50"
-                  : "hover:brightness-75"
+              disabled={isInputDisabled}
+              className={`absolute right-2 bottom-2  transition duration-300 rounded flex justify-center items-center  h-8 ${
+                isInputDisabled ? "cursor-not-allowed" : "hover:brightness-75"
               }`}
             >
               {loading ? (
-                <Cog6ToothIcon className="text-white animate-spin rounded-full h-6 w-6" />
+                <LoaderCircle className="text-accent animate-spin h-6" />
               ) : (
-                <PaperAirplaneIcon className="h-6 w-6 text-white" />
+                <Send className="h-6 text-accent" />
               )}
             </button>
           </div>
