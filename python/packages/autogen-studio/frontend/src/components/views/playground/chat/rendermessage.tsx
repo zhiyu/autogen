@@ -221,44 +221,59 @@ export const RenderMessage: React.FC<MessageProps> = ({
           ${isUser ? "text-accent" : "text-primary"}
         `}
         >
-          {isUser ? (
-            <User size={14} />
-          ) : message.source == "llm_call_event" ? (
-            <Bug size={14} />
-          ) : (
-            <Bot size={14} />
-          )}
-        </div>
-
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-primary">
-              {message.source}
-            </span>
-          </div>
-
-          <div className="text-sm text-secondary">
-            {messageUtils.isToolCallContent(content) ? (
-              <RenderToolCall content={content} />
-            ) : messageUtils.isMultiModalContent(content) ? (
-              <RenderMultiModal content={content} thumbnail />
-            ) : messageUtils.isNestedMessageContent(content) ? (
-              <RenderNestedMessages content={content} />
-            ) : messageUtils.isFunctionExecutionResult(content) ? (
-              <RenderToolResult content={content} />
-            ) : message.source === "llm_call_event" ? (
-              <LLMLogRenderer content={String(content)} />
+          <div className="p-1.5 rounded bg-light ">
+            {isUser ? (
+              <UserRound size={20} />
+            ) : message.source == "llm_call_event" ? (
+              <Bug size={16} />
             ) : (
               <Bot size={16} />
             )}
           </div>
-          {message.models_usage && (
-            <div className="text-xs text-secondary mt-1">
-              Tokens:{" "}
-              {(message.models_usage.prompt_tokens || 0) +
-                (message.models_usage.completion_tokens || 0)}
-            </div>
-          )}
+
+          <span className="ml-2 text-sm font-semibold text-primary">
+            {!isUser && message.source}
+          </span>
+        </div>
+
+        <div className="flex flex-col w-full">
+          <div
+            className={`text-sm text-secondary ${isUser ? "text-right" : ""}`}
+          >
+            {messageUtils.isToolCallContent(content) ? (
+              <RenderToolCall content={content} />
+            ) : messageUtils.isFunctionExecutionResult(content) ? (
+              <RenderToolResult content={content} />
+            ) : messageUtils.isMultiModalContent(content) ? (
+              <RenderMultiModal content={content} />
+            ) : message.source === "llm_call_event" ? (
+              <div className="ml-4 pl-5 border-secondary border-l-[1px]">
+                <LLMLogRenderer content={String(content)} />
+              </div>
+            ) : (
+              <div className="ml-4">
+                <div
+                  className={`${
+                    isUser
+                      ? "bg-tertiary rounded p-2"
+                      : "border-secondary border-l-[1px]"
+                  } pl-5`}
+                >
+                  <TruncatableText
+                    content={String(content)}
+                    className="break-all"
+                  />
+                </div>
+              </div>
+            )}
+            {message.models_usage && (
+              <div className="text-xs text-secondary mt-2 ml-4">
+                {(message.models_usage.prompt_tokens || 0) +
+                  (message.models_usage.completion_tokens || 0)}{" "}
+                tokens
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
