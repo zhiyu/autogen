@@ -12,6 +12,9 @@ import {
   GalleryHorizontalEnd,
   GalleryVerticalEnd,
   Rocket,
+  Beaker,
+  LucideBeaker,
+  FlaskConical,
 } from "lucide-react";
 
 import {
@@ -24,6 +27,7 @@ import {
 import { appContext } from "../hooks/provider";
 
 import Icon from "./icons";
+import { BeakerIcon } from "@heroicons/react/24/outline";
 
 import { useTranslation } from "react-i18next";
 
@@ -56,6 +60,12 @@ const navigation: INavItem[] = [
     href: "/gallery",
     icon: GalleryVerticalEnd,
     breadcrumbs: [{ name: "模板库", href: "/gallery", current: true }],
+  },
+  {
+    name: "实验室",
+    href: "/labs",
+    icon: FlaskConical,
+    breadcrumbs: [{ name: "Labs", href: "/labs", current: true }],
   },
   {
     name: "部署",

@@ -25,9 +25,10 @@ const getImageSource = (item: ImageContent): string => {
   return "/api/placeholder/400/320";
 };
 
-const RenderMultiModal: React.FC<{ content: (string | ImageContent)[] }> = ({
-  content,
-}) => (
+const RenderMultiModal: React.FC<{
+  content: (string | ImageContent)[];
+  thumbnail?: boolean;
+}> = ({ content, thumbnail = false }) => (
   <div className="space-y-2">
     {content.map((item, index) =>
       typeof item === "string" ? (
@@ -37,7 +38,9 @@ const RenderMultiModal: React.FC<{ content: (string | ImageContent)[] }> = ({
           key={index}
           src={getImageSource(item)}
           alt={item.alt || "Image"}
-          className="w-full h-auto rounded border border-secondary"
+          className={` h-auto rounded border border-secondary ${
+            thumbnail ? "w-24 h-24 " : " w-full "
+          }`}
         />
       )
     )}
@@ -96,6 +99,18 @@ export const messageUtils = {
     );
   },
 
+  isNestedMessageContent(content: unknown): content is AgentMessageConfig[] {
+    if (!Array.isArray(content)) return false;
+    return content.every(
+      (item) =>
+        typeof item === "object" &&
+        item !== null &&
+        "source" in item &&
+        "content" in item &&
+        "type" in item
+    );
+  },
+
   isMultiModalContent(content: unknown): content is (string | ImageContent)[] {
     if (!Array.isArray(content)) return false;
     return content.every(
@@ -123,13 +138,47 @@ export const messageUtils = {
   isUser(source: string): boolean {
     return source === "user";
   },
+
+  isMessageArray(
+    message: AgentMessageConfig | AgentMessageConfig[]
+  ): message is AgentMessageConfig[] {
+    return Array.isArray(message);
+  },
 };
 
 interface MessageProps {
-  message: AgentMessageConfig;
+  message: AgentMessageConfig | AgentMessageConfig[];
   isLast?: boolean;
   className?: string;
 }
+
+export const RenderNestedMessages: React.FC<{
+  content: AgentMessageConfig[];
+}> = ({ content }) => (
+  <div className="space-y-4">
+    {content.map((item, index) => (
+      <div
+        key={index}
+        className={`${
+          index > 0 ? "bordper border-secondary rounded   bg-secondary/30" : ""
+        }`}
+      >
+        {typeof item.content === "string" ? (
+          <TruncatableText
+            content={item.content}
+            className={`break-all ${index === 0 ? "text-base" : "text-sm"}`}
+          />
+        ) : messageUtils.isMultiModalContent(item.content) ? (
+          <RenderMultiModal content={item.content} thumbnail />
+        ) : (
+          <pre className="text-xs whitespace-pre-wrap overflow-x-auto">
+            {JSON.stringify(item.content, null, 2)}
+          </pre>
+        )}
+      </div>
+    ))}
+  </div>
+);
 
 export const RenderMessage: React.FC<MessageProps> = ({
   message,
@@ -137,6 +186,18 @@ export const RenderMessage: React.FC<MessageProps> = ({
   className = "",
 }) => {
   if (!message) return null;
+
+  // If message is an array, render the first message or return null
+  if (messageUtils.isMessageArray(message)) {
+    return message.length > 0 ? (
+      <RenderMessage
+        message={message[0]}
+        isLast={isLast}
+        className={className}
+      />
+    ) : null;
+  }
+
   const isUser = messageUtils.isUser(message.source);
   const content = message.content;
   const isLLMEventMessage = message.source === "llm_call_event";
@@ -160,59 +221,44 @@ export const RenderMessage: React.FC<MessageProps> = ({
           ${isUser ? "text-accent" : "text-primary"}
         `}
         >
-          <div className="p-1.5 rounded bg-light ">
-            {isUser ? (
-              <UserRound size={20} />
-            ) : message.source == "llm_call_event" ? (
-              <Bug size={16} />
+          {isUser ? (
+            <User size={14} />
+          ) : message.source == "llm_call_event" ? (
+            <Bug size={14} />
+          ) : (
+            <Bot size={14} />
+          )}
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold text-primary">
+              {message.source}
+            </span>
+          </div>
+
+          <div className="text-sm text-secondary">
+            {messageUtils.isToolCallContent(content) ? (
+              <RenderToolCall content={content} />
+            ) : messageUtils.isMultiModalContent(content) ? (
+              <RenderMultiModal content={content} thumbnail />
+            ) : messageUtils.isNestedMessageContent(content) ? (
+              <RenderNestedMessages content={content} />
+            ) : messageUtils.isFunctionExecutionResult(content) ? (
+              <RenderToolResult content={content} />
+            ) : message.source === "llm_call_event" ? (
+              <LLMLogRenderer content={String(content)} />
             ) : (
               <Bot size={16} />
             )}
           </div>
-
-          <span className="ml-2 text-sm font-semibold text-primary">
-            {!isUser && message.source}
-          </span>
-        </div>
-
-        <div className="flex flex-col w-full">
-          <div
-            className={`text-sm text-secondary ${isUser ? "text-right" : ""}`}
-          >
-            {messageUtils.isToolCallContent(content) ? (
-              <RenderToolCall content={content} />
-            ) : messageUtils.isFunctionExecutionResult(content) ? (
-              <RenderToolResult content={content} />
-            ) : messageUtils.isMultiModalContent(content) ? (
-              <RenderMultiModal content={content} />
-            ) : message.source === "llm_call_event" ? (
-              <div className="ml-4 pl-5 border-secondary border-l-[1px]">
-                <LLMLogRenderer content={String(content)} />
-              </div>
-            ) : (
-              <div className="ml-4">
-                <div
-                  className={`${
-                    isUser
-                      ? "bg-tertiary rounded p-2"
-                      : "border-secondary border-l-[1px]"
-                  } pl-5`}
-                >
-                  <TruncatableText
-                    content={String(content)}
-                    className="break-all"
-                  />
-                </div>
-              </div>
-            )}
-            {message.models_usage && (
-              <div className="text-xs text-secondary mt-2 ml-4">
-                {(message.models_usage.prompt_tokens || 0) +
-                  (message.models_usage.completion_tokens || 0)}{" "}
-                tokens
-              </div>
-            )}
-          </div>
+          {message.models_usage && (
+            <div className="text-xs text-secondary mt-1">
+              Tokens:{" "}
+              {(message.models_usage.prompt_tokens || 0) +
+                (message.models_usage.completion_tokens || 0)}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -38,7 +38,7 @@ jobs:
               sphinx-release-override: "dev",
             },
             {
-              ref: "python-v0.5.1",
+              ref: "python-v0.5.2",
               dest-dir: stable,
               uv-version: "0.5.13",
               sphinx-release-override: "stable",
@@ -106,6 +106,12 @@ jobs:
             {
               ref: "python-v0.5.1",
               dest-dir: "0.5.1",
+              uv-version: "0.5.13",
+              sphinx-release-override: "",
+            },
+            {
+              ref: "python-v0.5.2",
+              dest-dir: "0.5.2",
               uv-version: "0.5.13",
               sphinx-release-override: "",
             },
